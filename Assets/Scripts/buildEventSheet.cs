@@ -18,7 +18,7 @@ public class buildEventSheet : MonoBehaviour
 
     public void readCSV()
     {
-        string[] Lines = System.IO.File.ReadAllLines("D:\\Unity Projects\\Test\\My project\\Assets\\Scripts\\EventLogs\\eventLog.csv");
+        string[] Lines = System.IO.File.ReadAllLines(Application.dataPath + "\\Scripts\\EventLogs\\eventLog.csv");
         //string[] Columns = Lines[/*   INDEX  */].Split(';');
         for (int i = 0; i <= Lines.Length - 1; i++)
         {
@@ -65,7 +65,7 @@ public class buildEventSheet : MonoBehaviour
             sb.AppendLine(string.Join(delimiter, output[index]));
 
         // Create unique file paths
-        string filePath = "D:\\Unity Projects\\Test\\My project\\Assets\\Scripts\\EventLogs\\day_" + day + ".csv";
+        string filePath = Application.dataPath + "\\Scripts\\EventLogs\\day_" + day + ".csv";
 
         StreamWriter outStream = System.IO.File.CreateText(filePath);
         outStream.WriteLine(sb);
