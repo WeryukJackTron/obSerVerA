@@ -13,7 +13,7 @@ public class nextDayButton : MonoBehaviour
     public void onClick()
     {
         // Increase day counter
-        int dayNum = GameObject.Find("Farms").GetComponent<spreadDisease>().dayNumber += 1;
+        int dayNum = GameObject.Find("Farms").GetComponent<spreadDisease>().dayNumber;// += 1;
         Debug.Log("Day " + dayNum);
         // Call function to read the current day's event log
         GameObject.Find("Farms").GetComponent<spreadDisease>().readCurrentDayEventLog();

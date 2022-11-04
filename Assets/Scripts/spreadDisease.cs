@@ -136,7 +136,10 @@ public class spreadDisease : MonoBehaviour
                 }
             }
 
-            foreach (int i in bin)
+            if (bin.Count == 0)
+                continue;
+
+            for (int i = bin.Count - 1; i >= 0; i--)
                 log.RemoveAt(i);
         }
     }
