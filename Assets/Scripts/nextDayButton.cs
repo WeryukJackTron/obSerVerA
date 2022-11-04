@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class nextDayButton : MonoBehaviour
@@ -17,6 +18,8 @@ public class nextDayButton : MonoBehaviour
         // Increase day counter
         int dayNum = GameObject.Find("Farms").GetComponent<spreadDisease>().dayNumber;// += 1;
         Debug.Log("Day " + dayNum);
+        if (dayNum == 30)
+            SceneManager.LoadScene("End");
         // Call function to read the current day's event log
         GameObject.Find("Farms").GetComponent<spreadDisease>().readCurrentDayEventLog();
         
