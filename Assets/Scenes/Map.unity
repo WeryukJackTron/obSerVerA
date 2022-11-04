@@ -5374,6 +5374,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4139cde36b8c46243925d944848ba519, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  checkbox:
+  - {fileID: 1470010613}
+  - {fileID: 1998272525}
+  - {fileID: 545149487}
+  - {fileID: 630953348}
+  - {fileID: 814938108}
+  - {fileID: 566678603}
+  - {fileID: 1357951217}
+  - {fileID: 2045974283}
+  - {fileID: 1210864465}
+  checkboxes: 
 --- !u!1 &337319605
 GameObject:
   m_ObjectHideFlags: 0

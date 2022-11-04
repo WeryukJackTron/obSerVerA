@@ -38,6 +38,14 @@ public class TestScript : MonoBehaviour
             Exchange exchange = log[i];
             string line = string.Format("Farm: {0} send to farm: {1}, {2} days ago.", exchange.From, exchange.To, exchange.DaysBefore);
             grid_log.transform.GetChild(i).GetComponent<TextMeshProUGUI>().text = line;
+            if(id != exchange.From)
+            {
+                LogScript.instance.checkboxes[i] = exchange.From;
+            }
+            else
+            {
+                LogScript.instance.checkboxes[i] = exchange.To;
+            }
         }
         /* Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
          pos.z = 0;

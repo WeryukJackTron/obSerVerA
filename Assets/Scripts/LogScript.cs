@@ -5,10 +5,13 @@ using UnityEngine;
 
 public class LogScript : MonoBehaviour
 {
+    public List<TextMeshProUGUI> checkbox;
+    public static LogScript instance;
     // Start is called before the first frame update
     void Start()
     {
-        
+        instance = this;
+        checkboxes = new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     }
 
     // Update is called once per frame
@@ -25,11 +28,17 @@ public class LogScript : MonoBehaviour
         }
     }
 
+    public int[] checkboxes;
     public void sendVets()
     {
-        SideBarScript.instance.farms[0].transform.GetChild(4).gameObject.SetActive(true);
-        SideBarScript.instance.farms[15].transform.GetChild(4).gameObject.SetActive(true);
-        SideBarScript.instance.farms[20].transform.GetChild(4).gameObject.SetActive(true);
+        for(int i = 0; i < checkbox.Count; i++)
+        {
+            if(checkbox[i].text != "" && checkboxes[i] != 0)
+            {
+                if (!spreadDisease.instance.currInfectedFarms.Contains((ushort)checkboxes[i]))
+                    SideBarScript.instance.farms[checkboxes[i] - 1].transform.GetChild(4).gameObject.SetActive(true);
+            }
+        }
         resetCheckbox();
         FarmsScript.instance.Map.SetActive(true);
         FarmsScript.instance.Log.SetActive(false);
