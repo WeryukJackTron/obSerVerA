@@ -30,14 +30,11 @@ public class SelectScript : MonoBehaviour, ISelectHandler, IDeselectHandler
         if (selectedFarm)
         {
             GameObject farm = SideBarScript.instance.farms[idFarm - 1];
-            if (tipo == 0 && farm.transform.childCount < 6)
+            if (tipo == 0 && !farm.transform.GetChild(4).gameObject.activeSelf)
             {
-                GameObject aux = Instantiate(FarmsScript.instance.zone);
-                aux.transform.parent = farm.transform;
-                aux.transform.SetAsLastSibling();
-                aux.transform.localPosition = new Vector3(0, 0, 0);
-                aux.transform.localScale = new Vector3(.4f, .4f, 1f);
+                farm.transform.GetChild(4).gameObject.SetActive(true);
                 farm.transform.GetChild(0).GetComponent<FarmsScript>().zoned = true;
+                nextDayButton.farmid.Add(idFarm);
             }
             else if(tipo == 1)
             {

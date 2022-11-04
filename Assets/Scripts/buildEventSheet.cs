@@ -37,13 +37,18 @@ public class buildEventSheet : MonoBehaviour
         for (int i = 1; i < 33; i++)
         {
             // Give each farm between 1 and 5 events
-            int numActions = UnityEngine.Random.Range(1, 6);
+            int numActions = UnityEngine.Random.Range(1, 3);
             for (int j = 0; j < numActions; j++)
             {
                 rowDataTemp = new string[3];
                 rowDataTemp[0] = "" + i; // ID of Farm A
                 //rowDataTemp[1] = "" + UnityEngine.Random.Range(0, 2); // 0 to 1 - sent or reveived cows
-                rowDataTemp[1] = "" + UnityEngine.Random.Range(1, 33); // 1 to 32 - ID of Farm B
+                int aux = UnityEngine.Random.Range(1, 33);
+                while(aux == i)
+                {
+                    aux = UnityEngine.Random.Range(1, 33);
+                }
+                rowDataTemp[1] = "" + aux; // 1 to 32 - ID of Farm B
                 rowDataTemp[2] = "" + UnityEngine.Random.Range(1, 15); // 1 to 14 - number of days ago
                 rowData.Add(rowDataTemp);
             }

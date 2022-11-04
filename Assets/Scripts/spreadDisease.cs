@@ -95,7 +95,7 @@ public class spreadDisease : MonoBehaviour
             if(currInfectedFarms.Contains(from))
             {
                 locallogs.Add(to);
-                spreadFromContact(from);
+                spreadFromContact(to);
             }
 
             Exchange exchange = new Exchange();

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class nextDayButton : MonoBehaviour
 {
+    public static List<int> farmid = new List<int>();
     // Start is called before the first frame update
     void Start()
     {
@@ -17,6 +18,10 @@ public class nextDayButton : MonoBehaviour
         Debug.Log("Day " + dayNum);
         // Call function to read the current day's event log
         GameObject.Find("Farms").GetComponent<spreadDisease>().readCurrentDayEventLog();
+        
+        for(int i = 0; i < farmid.Count; i++)
+            FarmsScript.instance.quarantine(farmid[i]);
+        farmid.Clear();
 /*
         Debug.Log("Previously infected farms:");
         var prev = (GameObject.Find("Farms").GetComponent<spreadDisease>().prevInfectedFarms);
@@ -31,7 +36,7 @@ public class nextDayButton : MonoBehaviour
             if (SideBarScript.instance.farms[i].transform.GetChild(4).gameObject.activeSelf)
             {
                 SideBarScript.instance.farms[i].transform.GetChild(4).gameObject.SetActive(false);
-                if (!SideBarScript.instance.farms[i].transform.GetChild(3).gameObject.activeSelf)
+                if (!SideBarScript.instance.farms[i].transform.GetChild(3).gameObject.activeSelf && SideBarScript.instance.farms[i].transform.childCount < 6)
                 {
                     SideBarScript.instance.farms[i].transform.GetChild(2).gameObject.SetActive(true);
                 }
