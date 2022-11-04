@@ -78,6 +78,7 @@ public class spreadDisease : MonoBehaviour
         UpdateLogs();
 
         // Find the event log lines corresonding to all farms in currInfectedFarms
+        List<ushort> locallogs = new List<ushort>(currInfectedFarms);
         for (int i = 0; i < Lines.Length - 1; i++)
         {
 
@@ -93,7 +94,7 @@ public class spreadDisease : MonoBehaviour
 
             if(currInfectedFarms.Contains(from))
             {
-                currInfectedFarms.Add(to);
+                locallogs.Add(to);
                 spreadFromContact(from);
             }
 
@@ -116,7 +117,8 @@ public class spreadDisease : MonoBehaviour
             //    }
             //}
         }
-         
+
+        currInfectedFarms = new List<ushort>(locallogs);
     }
 
     private void UpdateLogs()
