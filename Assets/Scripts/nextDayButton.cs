@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class nextDayButton : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class nextDayButton : MonoBehaviour
         for(int i = 0; i < farmid.Count; i++)
             FarmsScript.instance.quarantine(farmid[i]);
         farmid.Clear();
+        SideBarScript.instance.gameObject.transform.GetChild(3).GetChild(0).GetComponent<Button>().interactable = true;
 /*
         Debug.Log("Previously infected farms:");
         var prev = (GameObject.Find("Farms").GetComponent<spreadDisease>().prevInfectedFarms);

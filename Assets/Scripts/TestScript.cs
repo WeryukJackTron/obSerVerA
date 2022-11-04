@@ -21,27 +21,45 @@ public class TestScript : MonoBehaviour
     Vector3Int aux = new Vector3Int(0, 0, 1);
     void Update()
     {
-       /* Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        pos.z = 0;
-        Vector3Int cellpos = paco.LocalToCell(pos);
-        if(aux == new Vector3Int(0, 0, 1))
-            aux = cellpos;
-        if (cellpos != aux)
+        int id = int.Parse(this.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
+        List<Exchange> log = spreadDisease.instance.logs[id - 1];
+        int j = 9;
+        if (log.Count < 9)
         {
-            //pepe.SetTileFlags(aux, TileFlags.None);
-            pepe.SetColor(aux, Color.white);
-            aux = new Vector3Int(0, 0, 1);
+            for(int i = log.Count; i < 9; i++)
+            {
+                grid_log.transform.GetChild(i).gameObject.SetActive(false);
+            }
+            j = log.Count;
         }
-        else
+        for (int i = 0; i < j; i++)
         {
-            //pepe.SetTileFlags(cellpos, TileFlags.None);
-            pepe.SetColor(cellpos, Color.yellow);
+            grid_log.transform.GetChild(i).gameObject.SetActive(true);
+            Exchange exchange = log[i];
+            string line = string.Format("Farm: {0} send to farm: {1}, {2} days ago.", exchange.From, exchange.To, exchange.DaysBefore);
+            grid_log.transform.GetChild(i).GetComponent<TextMeshProUGUI>().text = line;
         }
-        if (Input.GetMouseButtonUp(0))
-        {
-            pepe.SetColor(cellpos, Color.red);
-            pepe.SetTileFlags(cellpos, TileFlags.LockColor);
-        }*/
+        /* Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+         pos.z = 0;
+         Vector3Int cellpos = paco.LocalToCell(pos);
+         if(aux == new Vector3Int(0, 0, 1))
+             aux = cellpos;
+         if (cellpos != aux)
+         {
+             //pepe.SetTileFlags(aux, TileFlags.None);
+             pepe.SetColor(aux, Color.white);
+             aux = new Vector3Int(0, 0, 1);
+         }
+         else
+         {
+             //pepe.SetTileFlags(cellpos, TileFlags.None);
+             pepe.SetColor(cellpos, Color.yellow);
+         }
+         if (Input.GetMouseButtonUp(0))
+         {
+             pepe.SetColor(cellpos, Color.red);
+             pepe.SetTileFlags(cellpos, TileFlags.LockColor);
+         }*/
     }
 
     public void ShowHideCheckBoxes()
