@@ -31,7 +31,7 @@ public class buildEventSheet : MonoBehaviour
     void Save(int day)
     {
 
-        string[] rowDataTemp = new string[4];
+        string[] rowDataTemp = new string[3];
 
         // Loop through every farm
         for (int i = 1; i < 33; i++)
@@ -40,11 +40,11 @@ public class buildEventSheet : MonoBehaviour
             int numActions = UnityEngine.Random.Range(1, 6);
             for (int j = 0; j < numActions; j++)
             {
-                rowDataTemp = new string[4];
+                rowDataTemp = new string[3];
                 rowDataTemp[0] = "" + i; // ID of Farm A
-                rowDataTemp[1] = "" + UnityEngine.Random.Range(0, 2); // 0 to 1 - sent or reveived cows
-                rowDataTemp[2] = "" + UnityEngine.Random.Range(1, 33); // 1 to 32 - ID of Farm B
-                rowDataTemp[3] = "" + UnityEngine.Random.Range(1, 15); // 1 to 14 - number of days ago
+                //rowDataTemp[1] = "" + UnityEngine.Random.Range(0, 2); // 0 to 1 - sent or reveived cows
+                rowDataTemp[1] = "" + UnityEngine.Random.Range(1, 33); // 1 to 32 - ID of Farm B
+                rowDataTemp[2] = "" + UnityEngine.Random.Range(1, 15); // 1 to 14 - number of days ago
                 rowData.Add(rowDataTemp);
             }
         }

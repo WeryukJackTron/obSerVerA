@@ -2,6 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public struct Exchange
+{
+    public short From;
+    public short To;
+    public ushort DaysBefore;
+}
+
 public class spreadDisease : MonoBehaviour
 {
     // List of all farms
@@ -9,15 +16,22 @@ public class spreadDisease : MonoBehaviour
     // Tracker for current day
     public int dayNumber = 1;
     // List of all farms that are infected - the current day's infected farms
-    public List<int> prevInfectedFarms = new List<int>();
+    //public List<ushort>[] prevInfectedFarms = new List<ushort>[14];
     // List of farms that are infected on the current day
-    public List<int> currInfectedFarms = new List<int>();
+    public List<ushort> currInfectedFarms = new List<ushort>();
+    public List<ushort> quarantedFarms = new List<ushort>();
+
+    public List<Exchange>[] logs = new List<Exchange>[32];
+
     public Sprite infected;
     public static spreadDisease instance;
 
     // Start is called before the first frame update
     void Start()
     {
+        for (int i = 0; i < 32; i++)
+            logs[i] = new List<Exchange>();
+
         initialInfection();
         instance = this;
         //Debug.Log("Previously infected farms:");
@@ -48,37 +62,83 @@ public class spreadDisease : MonoBehaviour
             farmsList.Add(child);
         }
 
-        int rand = UnityEngine.Random.Range(0, 32);
+        ushort rand = (ushort)UnityEngine.Random.Range(0, 32);
 
         farmsList[rand].GetChild(1).gameObject.SetActive(true);
-        //farmsList[rand].GetComponent<SpriteRenderer>().sprite = infected;
-        // Convert string name of farm to int, add it to currInfected Farms
-        currInfectedFarms.Add(int.Parse(farmsList[rand].name));
-
-        Debug.Log(currInfectedFarms[0]);
-
+        currInfectedFarms.Add((ushort)(rand + 1));
+  
+        //readCurrentDayEventLog();
     }
 
-    public void readCurrentDayEventLog(int dayNum)
+    public void readCurrentDayEventLog()
     {
-        string filename = "D:\\Unity Projects\\Test\\My project\\Assets\\Scripts\\EventLogs\\day_" + dayNum + ".csv";
+        string filename = (Application.dataPath + "\\Scripts\\EventLogs\\day_" + (dayNumber++) + ".csv");
         string[] Lines = System.IO.File.ReadAllLines(filename);
-        
+
+        UpdateLogs();
+
         // Find the event log lines corresonding to all farms in currInfectedFarms
         for (int i = 0; i < Lines.Length - 1; i++)
         {
-            for (int j = 0; j <= currInfectedFarms.Count - 1; j++)
-            {
-                if ( int.Parse(Lines[i].ToString().Split(",")[0]) == currInfectedFarms[j])
-                {
-                    int spreadToFarmX = int.Parse(Lines[i].ToString().Split(",")[2]);
-                    spreadFromContact(spreadToFarmX);
-                    Debug.Log(int.Parse(Lines[i].ToString().Split(",")[2]));
 
-                }
+            string data = Lines[i];
+            string[] values = data.Split(',');
+
+            ushort from = ushort.Parse(values[0]);
+            ushort to = ushort.Parse(values[1]);
+            ushort days = ushort.Parse(values[2]);
+
+            if (quarantedFarms.Contains(to) || quarantedFarms.Contains(from))
+                continue;
+
+            if(currInfectedFarms.Contains(from))
+            {
+                currInfectedFarms.Add(to);
+                spreadFromContact(from);
             }
+
+            Exchange exchange = new Exchange();
+            exchange.From = (short)from;
+            exchange.To = (short)to;
+            exchange.DaysBefore = days;
+
+            logs[from - 1].Add(exchange);
+            logs[to - 1].Add(exchange);
+
+            //for (int j = 0; j <= currInfectedFarms.Count - 1; j++)
+            //{
+            //    if ( int.Parse(Lines[i].ToString().Split(",")[0]) == currInfectedFarms[j])
+            //    {
+            //        int spreadToFarmX = int.Parse(Lines[i].ToString().Split(",")[2]);
+            //        spreadFromContact(spreadToFarmX);
+            //        Debug.Log(int.Parse(Lines[i].ToString().Split(",")[2]));
+            //
+            //    }
+            //}
         }
          
+    }
+
+    private void UpdateLogs()
+    {
+        foreach (List<Exchange> log in logs)
+        {
+            List<int> bin = new List<int>();
+            for (int i = 0; i < log.Count; i++)
+            {
+                if (log[i].DaysBefore == 14)
+                    bin.Add(i);
+                else
+                {
+                    Exchange exchange = log[i];
+                    exchange.DaysBefore++;
+                    log[i] = exchange;
+                }
+            }
+
+            foreach (int i in bin)
+                log.RemoveAt(i);
+        }
     }
 
     void spreadFromContact(int farm)

@@ -16,7 +16,7 @@ public class nextDayButton : MonoBehaviour
         int dayNum = GameObject.Find("Farms").GetComponent<spreadDisease>().dayNumber += 1;
         Debug.Log("Day " + dayNum);
         // Call function to read the current day's event log
-        GameObject.Find("Farms").GetComponent<spreadDisease>().readCurrentDayEventLog(dayNum);
+        GameObject.Find("Farms").GetComponent<spreadDisease>().readCurrentDayEventLog();
 /*
         Debug.Log("Previously infected farms:");
         var prev = (GameObject.Find("Farms").GetComponent<spreadDisease>().prevInfectedFarms);
