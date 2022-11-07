@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -18,35 +19,9 @@ public class TestScript : MonoBehaviour
         instance = this;
     }
 
-    Vector3Int aux = new Vector3Int(0, 0, 1);
+    //Vector3Int aux = new Vector3Int(0, 0, 1);
     void Update()
     {
-        int id = int.Parse(this.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
-        List<Exchange> log = spreadDisease.instance.logs[id - 1];
-        int j = 9;
-        if (log.Count < 9)
-        {
-            for(int i = log.Count; i < 9; i++)
-            {
-                grid_log.transform.GetChild(i).gameObject.SetActive(false);
-            }
-            j = log.Count;
-        }
-        for (int i = 0; i < j; i++)
-        {
-            grid_log.transform.GetChild(i).gameObject.SetActive(true);
-            Exchange exchange = log[i];
-            string line = string.Format("Farm: {0} send to farm: {1}, {2} days ago.", exchange.From, exchange.To, exchange.DaysBefore);
-            grid_log.transform.GetChild(i).GetComponent<TextMeshProUGUI>().text = line;
-            if(id != exchange.From)
-            {
-                LogScript.instance.checkboxes[i] = exchange.From;
-            }
-            else
-            {
-                LogScript.instance.checkboxes[i] = exchange.To;
-            }
-        }
         /* Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
          pos.z = 0;
          Vector3Int cellpos = paco.LocalToCell(pos);
@@ -70,13 +45,58 @@ public class TestScript : MonoBehaviour
          }*/
     }
 
+    public void UpdateLog()
+    {
+        int id = int.Parse(this.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
+        List<Exchange> log = GameContext.sLogs[id - 1];
+        int j = 9;
+        if (log.Count < 9)
+        {
+            for (int i = log.Count; i < 9; i++)
+            {
+                grid_log.transform.GetChild(i).gameObject.SetActive(false);
+            }
+            j = log.Count;
+        }
+
+        Array.Fill(LogScript.checkboxes, 0);//Since we just opened refilling all checkboxes with 0.
+
+        for (int i = 0; i < j; i++)
+        {
+            grid_log.transform.GetChild(i).gameObject.SetActive(true);
+            Exchange exchange = log[i];
+            string line = string.Format("Farm: {0} send to farm: {1} [{2} days ago]", exchange.From, exchange.To, exchange.DaysBefore);
+            grid_log.transform.GetChild(i).GetComponent<TextMeshProUGUI>().text = line;
+
+            if (id != exchange.From)
+            {
+                LogScript.checkboxes[i] = exchange.From;
+            }
+            else
+            {
+                LogScript.checkboxes[i] = exchange.To;
+            }
+        }
+    }
+
     public void ShowHideCheckBoxes()
     {
         confirm.SetActive(!confirm.activeSelf);
         reset.SetActive(!reset.activeSelf);
-        for(int i = 0; i < grid_log.transform.childCount; i++)
+
+        foreach(Transform transform in grid_log.transform)
         {
-            grid_log.transform.GetChild(i).GetChild(1).gameObject.SetActive(!grid_log.transform.GetChild(i).GetChild(1).gameObject.activeSelf);
+            if (!transform.gameObject.activeSelf)
+                break;
+
+            transform.GetChild(1).gameObject.SetActive(!transform.GetChild(1).gameObject.activeSelf);
         }
+
+        //For some reason doesn't work Unity complains that Child is out of bounds when use GetChild(1)
+        // Just like resetCheckboxes in LogScript
+        //for(int i = 0; i < grid_log.transform.childCount; i++)
+        //{
+        //    grid_log.transform.GetChild(i).GetChild(1).gameObject.SetActive(!grid_log.transform.GetChild(i).GetChild(1).gameObject.activeSelf);
+        //}
     }
 }

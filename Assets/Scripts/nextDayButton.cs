@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class nextDayButton : MonoBehaviour
 {
     public static List<int> farmid = new List<int>();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -15,16 +16,17 @@ public class nextDayButton : MonoBehaviour
 
     public void onClick()
     {
-        // Increase day counter
-        int dayNum = GameObject.Find("Farms").GetComponent<spreadDisease>().dayNumber;// += 1;
+        // Get day counter
+        int dayNum = GameContext.sCurrentDay;// += 1;
         Debug.Log("Day " + dayNum);
         if (dayNum == 30)
             SceneManager.LoadScene("End");
-        // Call function to read the current day's event log
-        GameObject.Find("Farms").GetComponent<spreadDisease>().readCurrentDayEventLog();
-        
+        // Call function to advance the model by one day
+        ModelHandler.Run();
+
         for(int i = 0; i < farmid.Count; i++)
-            FarmsScript.instance.quarantine(farmid[i]);
+            FarmsScript.quarantine(farmid[i]);
+
         farmid.Clear();
         SideBarScript.instance.gameObject.transform.GetChild(3).GetChild(0).GetComponent<Button>().interactable = true;
 /*

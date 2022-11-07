@@ -54,9 +54,10 @@ public class SelectScript : MonoBehaviour, ISelectHandler, IDeselectHandler
     IEnumerator DeselectingFarm(GameObject farm)
     {
         yield return new WaitForSeconds(0.01f);
-        farm.transform.GetChild(0).GetComponent<FarmsScript>().Map.SetActive(false);
-        farm.transform.GetChild(0).GetComponent<FarmsScript>().Log.SetActive(true);
-        farm.transform.GetChild(0).GetComponent<FarmsScript>().Log.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = farm.name;
+        GameContext.Map.SetActive(false);
+        GameContext.Log.SetActive(true);
+        GameContext.Log.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = farm.name;
+        GameContext.Log.GetComponent<TestScript>().UpdateLog();
         Debug.Log("SelectScript");
         yield return null;
     }

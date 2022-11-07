@@ -7,11 +7,9 @@ using UnityEngine.EventSystems;
 
 public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-
     public GameObject idfarm;
-    public GameObject zone;
-    public GameObject Log, Map;
-    public static FarmsScript instance;
+    public float Radius = 22.23117306f;
+    private static Sprite Infected = null;
 
     bool options = false;
     public void OnPointerEnter(PointerEventData eventData)
@@ -31,21 +29,22 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     void Start()
     {
         idfarm.GetComponent<TextMeshProUGUI>().text = this.gameObject.transform.parent.name;
-        instance = this;
+        if(Infected == null)
+            Infected = Resources.Load<Sprite>("Barn_Infected");
     }
 
     // Update is called once per frame
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.P))
-            Map.transform.GetChild(1).GetChild(3).GetChild(0).GetComponent<SelectScript>().deselectFarm();
+            GameContext.Map.transform.GetChild(1).GetChild(3).GetChild(0).GetComponent<SelectScript>().deselectFarm();
         if (options && Input.GetMouseButtonDown(0))
         {
             if(this.transform.parent.GetChild(1).gameObject.activeSelf || this.transform.parent.GetChild(3).gameObject.activeSelf)
             {
                 this.transform.parent.GetChild(1).gameObject.SetActive(false);
                 this.transform.parent.GetChild(3).gameObject.SetActive(false);
-                this.transform.parent.GetComponent<SpriteRenderer>().sprite = spreadDisease.instance.infected;
+                this.transform.parent.GetComponent<SpriteRenderer>().sprite = Infected;
                 GameObject myEventSystem = GameObject.Find("EventSystem");
                 myEventSystem.GetComponent<EventSystem>().SetSelectedGameObject(null);
                 StartCoroutine(DelayDeselectFarm());
@@ -68,9 +67,10 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             }
             else if(SelectScript.selectedLog)
             {
-                Map.SetActive(false);
-                Log.SetActive(true);
-                Log.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = this.transform.parent.name;
+                GameContext.Map.SetActive(false);
+                GameContext.Log.SetActive(true);
+                GameContext.Log.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = this.transform.parent.name;
+                GameContext.Log.GetComponent<TestScript>().UpdateLog();
                 this.gameObject.transform.GetChild(0).gameObject.SetActive(false);
                 SelectScript.selectedLog = false;
                 Debug.Log("FarmsScript");
@@ -82,172 +82,197 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         yield return new WaitForSeconds(0.1f);
         Debug.Log("Deselected");
-        Map.transform.GetChild(1).GetChild(3).GetChild(0).GetComponent<SelectScript>().deselectFarm();
-        Map.transform.GetChild(1).GetChild(0).GetChild(0).GetComponent<SelectScript>().deselectFarm();
+        GameContext.Map.transform.GetChild(1).GetChild(3).GetChild(0).GetComponent<SelectScript>().deselectFarm();
+        GameContext.Map.transform.GetChild(1).GetChild(0).GetChild(0).GetComponent<SelectScript>().deselectFarm();
         yield return null;
     }
 
 
-    public void quarantine(int i)
+    public static void quarantine(int farmID)
     {
-
-        GameObject aux = Instantiate(zone);
-        aux.transform.parent = SideBarScript.instance.farms[i - 1].transform;
+        GameObject aux = Instantiate(GameContext.Zone);
+        aux.transform.parent = SideBarScript.instance.farms[farmID - 1].transform;
         aux.transform.SetAsLastSibling();
         aux.transform.localPosition = new Vector3(0, 0, 0);
         aux.transform.localScale = new Vector3(.4f, .4f, 1f);
 
-        switch (i)
+        float radius = 22.23117306f;//I found it using gizmos :D
+        Vector2 pos = GameContext.Farms.GetChild(farmID - 1).position;
+        for (int i = 0; i < GameContext.Farms.childCount; i++)//Check which of the farms are inside the quarantine radius
         {
-            case 1:
-                spreadDisease.instance.quarantedFarms.Add(1);
-                spreadDisease.instance.quarantedFarms.Add(2);
-                spreadDisease.instance.quarantedFarms.Add(9);
-                break;
-            case 2:
-                spreadDisease.instance.quarantedFarms.Add(1);
-                spreadDisease.instance.quarantedFarms.Add(2);
-                spreadDisease.instance.quarantedFarms.Add(3);
-                spreadDisease.instance.quarantedFarms.Add(10);
-                break;
-            case 3:
-                spreadDisease.instance.quarantedFarms.Add(2);
-                spreadDisease.instance.quarantedFarms.Add(3);
-                break;
-            case 4:
-                spreadDisease.instance.quarantedFarms.Add(4);
-                spreadDisease.instance.quarantedFarms.Add(11);
-                break;
-            case 5:
-                spreadDisease.instance.quarantedFarms.Add(5);
-                spreadDisease.instance.quarantedFarms.Add(7);
-                spreadDisease.instance.quarantedFarms.Add(12);
-                break;
-            case 6:
-                spreadDisease.instance.quarantedFarms.Add(5);
-                spreadDisease.instance.quarantedFarms.Add(6);
-                spreadDisease.instance.quarantedFarms.Add(7);
-                spreadDisease.instance.quarantedFarms.Add(12);
-                break;
-            case 7:
-                spreadDisease.instance.quarantedFarms.Add(6);
-                spreadDisease.instance.quarantedFarms.Add(7);
-                spreadDisease.instance.quarantedFarms.Add(8);
-                spreadDisease.instance.quarantedFarms.Add(18);
-                break;
-            case 8:
-                spreadDisease.instance.quarantedFarms.Add(7);
-                spreadDisease.instance.quarantedFarms.Add(8);
-                break;
-            case 9:
-                spreadDisease.instance.quarantedFarms.Add(1);
-                spreadDisease.instance.quarantedFarms.Add(9);
-                break;
-            case 10:
-                spreadDisease.instance.quarantedFarms.Add(2);
-                spreadDisease.instance.quarantedFarms.Add(10);
-                spreadDisease.instance.quarantedFarms.Add(14);
-                break;
-            case 11:
-                spreadDisease.instance.quarantedFarms.Add(4);
-                spreadDisease.instance.quarantedFarms.Add(11);
-                break;
-            case 12:
-                spreadDisease.instance.quarantedFarms.Add(5);
-                spreadDisease.instance.quarantedFarms.Add(6);
-                spreadDisease.instance.quarantedFarms.Add(12);
-                spreadDisease.instance.quarantedFarms.Add(17);
-                spreadDisease.instance.quarantedFarms.Add(18);
-                break;
-            case 13:
-                spreadDisease.instance.quarantedFarms.Add(13);
-                break;
-            case 14:
-                spreadDisease.instance.quarantedFarms.Add(10);
-                spreadDisease.instance.quarantedFarms.Add(14);
-                spreadDisease.instance.quarantedFarms.Add(21);
-                break;
-            case 15:
-                spreadDisease.instance.quarantedFarms.Add(15);
-                spreadDisease.instance.quarantedFarms.Add(16);
-                spreadDisease.instance.quarantedFarms.Add(23);
-                break;
-            case 16:
-                spreadDisease.instance.quarantedFarms.Add(15);
-                spreadDisease.instance.quarantedFarms.Add(16);
-                break;
-            case 17:
-                spreadDisease.instance.quarantedFarms.Add(12);
-                spreadDisease.instance.quarantedFarms.Add(17);
-                spreadDisease.instance.quarantedFarms.Add(18);
-                break;
-            case 18:
-                spreadDisease.instance.quarantedFarms.Add(7);
-                spreadDisease.instance.quarantedFarms.Add(12);
-                spreadDisease.instance.quarantedFarms.Add(17);
-                spreadDisease.instance.quarantedFarms.Add(18);
-                break;
-            case 19:
-                spreadDisease.instance.quarantedFarms.Add(19);
-                break;
-            case 20:
-                spreadDisease.instance.quarantedFarms.Add(20);
-                spreadDisease.instance.quarantedFarms.Add(21);
-                spreadDisease.instance.quarantedFarms.Add(24);
-                break;
-            case 21:
-                spreadDisease.instance.quarantedFarms.Add(14);
-                spreadDisease.instance.quarantedFarms.Add(20);
-                spreadDisease.instance.quarantedFarms.Add(21);
-                spreadDisease.instance.quarantedFarms.Add(22);
-                spreadDisease.instance.quarantedFarms.Add(25);
-                break;
-            case 22:
-                spreadDisease.instance.quarantedFarms.Add(21);
-                spreadDisease.instance.quarantedFarms.Add(22);
-                spreadDisease.instance.quarantedFarms.Add(25);
-                break;
-            case 23:
-                spreadDisease.instance.quarantedFarms.Add(15);
-                spreadDisease.instance.quarantedFarms.Add(23);
-                break;
-            case 24:
-                spreadDisease.instance.quarantedFarms.Add(20);
-                spreadDisease.instance.quarantedFarms.Add(24);
-                spreadDisease.instance.quarantedFarms.Add(25);
-                spreadDisease.instance.quarantedFarms.Add(26);
-                break;
-            case 25:
-                spreadDisease.instance.quarantedFarms.Add(21);
-                spreadDisease.instance.quarantedFarms.Add(22);
-                spreadDisease.instance.quarantedFarms.Add(24);
-                spreadDisease.instance.quarantedFarms.Add(25);
-                spreadDisease.instance.quarantedFarms.Add(27);
-                break;
-            case 26:
-                spreadDisease.instance.quarantedFarms.Add(24);
-                spreadDisease.instance.quarantedFarms.Add(26);
-                break;
-            case 27:
-                spreadDisease.instance.quarantedFarms.Add(25);
-                spreadDisease.instance.quarantedFarms.Add(27);
-                break;
-            case 28:
-                spreadDisease.instance.quarantedFarms.Add(28);
-                break;
-            case 29:
-                spreadDisease.instance.quarantedFarms.Add(29);
-                break;
-            case 30:
-                spreadDisease.instance.quarantedFarms.Add(30);
-                break;
-            case 31:
-                spreadDisease.instance.quarantedFarms.Add(31);
-                break;
-            case 32:
-                spreadDisease.instance.quarantedFarms.Add(32);
-                break;
+            if (i == farmID - 1)
+                continue;
+
+            Transform child = GameContext.Farms.GetChild(i);
+            float dist = Vector2.Distance(pos, child.position);
+            if(dist <= radius)//Farm i+1 is inside the quarantine radius
+            {
+                ushort id = (ushort)(i + 1);
+                if (!GameContext.sQuarantineFarms.Contains(id))
+                    GameContext.sQuarantineFarms.Add(id);
+            }
         }
+
+        if (!GameContext.sQuarantineFarms.Contains((ushort)farmID))//Also add the farm that was actually specified
+            GameContext.sQuarantineFarms.Add((ushort)farmID);
+
+        //switch (farmID)
+        //{
+        //    case 1:
+        //        GameContext.sQuarantineFarms.Add(1);
+        //        GameContext.sQuarantineFarms.Add(2);
+        //        GameContext.sQuarantineFarms.Add(9);
+        //        break;
+        //    case 2:
+        //        GameContext.sQuarantineFarms.Add(1);
+        //        GameContext.sQuarantineFarms.Add(2);
+        //        GameContext.sQuarantineFarms.Add(3);
+        //        GameContext.sQuarantineFarms.Add(10);
+        //        break;
+        //    case 3:
+        //        GameContext.sQuarantineFarms.Add(2);
+        //        GameContext.sQuarantineFarms.Add(3);
+        //        break;
+        //    case 4:
+        //        GameContext.sQuarantineFarms.Add(4);
+        //        GameContext.sQuarantineFarms.Add(11);
+        //        break;
+        //    case 5:
+        //        GameContext.sQuarantineFarms.Add(5);
+        //        GameContext.sQuarantineFarms.Add(7);
+        //        GameContext.sQuarantineFarms.Add(12);
+        //        break;
+        //    case 6:
+        //        GameContext.sQuarantineFarms.Add(5);
+        //        GameContext.sQuarantineFarms.Add(6);
+        //        GameContext.sQuarantineFarms.Add(7);
+        //        GameContext.sQuarantineFarms.Add(12);
+        //        break;
+        //    case 7:
+        //        GameContext.sQuarantineFarms.Add(6);
+        //        GameContext.sQuarantineFarms.Add(7);
+        //        GameContext.sQuarantineFarms.Add(8);
+        //        GameContext.sQuarantineFarms.Add(18);
+        //        break;
+        //    case 8:
+        //        GameContext.sQuarantineFarms.Add(7);
+        //        GameContext.sQuarantineFarms.Add(8);
+        //        break;
+        //    case 9:
+        //        GameContext.sQuarantineFarms.Add(1);
+        //        GameContext.sQuarantineFarms.Add(9);
+        //        break;
+        //    case 10:
+        //        GameContext.sQuarantineFarms.Add(2);
+        //        GameContext.sQuarantineFarms.Add(10);
+        //        GameContext.sQuarantineFarms.Add(14);
+        //        break;
+        //    case 11:
+        //        GameContext.sQuarantineFarms.Add(4);
+        //        GameContext.sQuarantineFarms.Add(11);
+        //        break;
+        //    case 12:
+        //        GameContext.sQuarantineFarms.Add(5);
+        //        GameContext.sQuarantineFarms.Add(6);
+        //        GameContext.sQuarantineFarms.Add(12);
+        //        GameContext.sQuarantineFarms.Add(17);
+        //        GameContext.sQuarantineFarms.Add(18);
+        //        break;
+        //    case 13:
+        //        GameContext.sQuarantineFarms.Add(13);
+        //        break;
+        //    case 14:
+        //        GameContext.sQuarantineFarms.Add(10);
+        //        GameContext.sQuarantineFarms.Add(14);
+        //        GameContext.sQuarantineFarms.Add(21);
+        //        break;
+        //    case 15:
+        //        GameContext.sQuarantineFarms.Add(15);
+        //        GameContext.sQuarantineFarms.Add(16);
+        //        GameContext.sQuarantineFarms.Add(23);
+        //        break;
+        //    case 16:
+        //        GameContext.sQuarantineFarms.Add(15);
+        //        GameContext.sQuarantineFarms.Add(16);
+        //        break;
+        //    case 17:
+        //        GameContext.sQuarantineFarms.Add(12);
+        //        GameContext.sQuarantineFarms.Add(17);
+        //        GameContext.sQuarantineFarms.Add(18);
+        //        break;
+        //    case 18:
+        //        GameContext.sQuarantineFarms.Add(7);
+        //        GameContext.sQuarantineFarms.Add(12);
+        //        GameContext.sQuarantineFarms.Add(17);
+        //        GameContext.sQuarantineFarms.Add(18);
+        //        break;
+        //    case 19:
+        //        GameContext.sQuarantineFarms.Add(19);
+        //        break;
+        //    case 20:
+        //        GameContext.sQuarantineFarms.Add(20);
+        //        GameContext.sQuarantineFarms.Add(21);
+        //        GameContext.sQuarantineFarms.Add(24);
+        //        break;
+        //    case 21:
+        //        GameContext.sQuarantineFarms.Add(14);
+        //        GameContext.sQuarantineFarms.Add(20);
+        //        GameContext.sQuarantineFarms.Add(21);
+        //        GameContext.sQuarantineFarms.Add(22);
+        //        GameContext.sQuarantineFarms.Add(25);
+        //        break;
+        //    case 22:
+        //        GameContext.sQuarantineFarms.Add(21);
+        //        GameContext.sQuarantineFarms.Add(22);
+        //        GameContext.sQuarantineFarms.Add(25);
+        //        break;
+        //    case 23:
+        //        GameContext.sQuarantineFarms.Add(15);
+        //        GameContext.sQuarantineFarms.Add(23);
+        //        break;
+        //    case 24:
+        //        GameContext.sQuarantineFarms.Add(20);
+        //        GameContext.sQuarantineFarms.Add(24);
+        //        GameContext.sQuarantineFarms.Add(25);
+        //        GameContext.sQuarantineFarms.Add(26);
+        //        break;
+        //    case 25:
+        //        GameContext.sQuarantineFarms.Add(21);
+        //        GameContext.sQuarantineFarms.Add(22);
+        //        GameContext.sQuarantineFarms.Add(24);
+        //        GameContext.sQuarantineFarms.Add(25);
+        //        GameContext.sQuarantineFarms.Add(27);
+        //        break;
+        //    case 26:
+        //        GameContext.sQuarantineFarms.Add(24);
+        //        GameContext.sQuarantineFarms.Add(26);
+        //        break;
+        //    case 27:
+        //        GameContext.sQuarantineFarms.Add(25);
+        //        GameContext.sQuarantineFarms.Add(27);
+        //        break;
+        //    case 28:
+        //        GameContext.sQuarantineFarms.Add(28);
+        //        break;
+        //    case 29:
+        //        GameContext.sQuarantineFarms.Add(29);
+        //        break;
+        //    case 30:
+        //        GameContext.sQuarantineFarms.Add(30);
+        //        break;
+        //    case 31:
+        //        GameContext.sQuarantineFarms.Add(31);
+        //        break;
+        //    case 32:
+        //        GameContext.sQuarantineFarms.Add(32);
+        //        break;
+        //}
     }
+
+    //private void OnDrawGizmosSelected()
+    //{
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawWireSphere(transform.position, Radius);
+    //}
 
 }
