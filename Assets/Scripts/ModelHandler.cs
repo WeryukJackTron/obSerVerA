@@ -79,7 +79,7 @@ public static class ModelHandler
                 if(GameContext.sInfectedFarms.Contains(from))
                 {
                     infectedFarms.Add(to);
-                    SpreadToFarm(to);
+                    //SpreadToFarm(to);
                 }
 
                 Exchange exchange = new Exchange();

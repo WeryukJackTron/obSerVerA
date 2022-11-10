@@ -33,6 +33,7 @@ public class SelectScript : MonoBehaviour, ISelectHandler, IDeselectHandler
             if (tipo == 0 && !farm.transform.GetChild(4).gameObject.activeSelf)
             {
                 farm.transform.GetChild(4).gameObject.SetActive(true);
+                farm.transform.GetChild(4).GetComponent<SpriteRenderer>().color = Color.green;
                 farm.transform.GetChild(0).GetComponent<FarmsScript>().zoned = true;
                 nextDayButton.farmid.Add(idFarm);
             }

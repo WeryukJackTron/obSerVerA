@@ -43,9 +43,13 @@ public class nextDayButton : MonoBehaviour
             if (SideBarScript.instance.farms[i].transform.GetChild(4).gameObject.activeSelf)
             {
                 SideBarScript.instance.farms[i].transform.GetChild(4).gameObject.SetActive(false);
-                if (!SideBarScript.instance.farms[i].transform.GetChild(3).gameObject.activeSelf && SideBarScript.instance.farms[i].transform.childCount < 6)
+                if (!GameContext.sInfectedFarms.Contains((ushort)int.Parse(SideBarScript.instance.farms[i].name)) && SideBarScript.instance.farms[i].transform.childCount < 6)
                 {
                     SideBarScript.instance.farms[i].transform.GetChild(2).gameObject.SetActive(true);
+                }
+                else if(SideBarScript.instance.farms[i].transform.childCount < 6)
+                {
+                    SideBarScript.instance.farms[i].transform.GetChild(3).gameObject.SetActive(true);
                 }
             }
         }

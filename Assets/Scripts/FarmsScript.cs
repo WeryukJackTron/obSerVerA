@@ -9,7 +9,7 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 {
     public GameObject idfarm;
     public float Radius = 22.23117306f;
-    private static Sprite Infected = null;
+    public static Sprite Infected = null;
 
     bool options = false;
     public void OnPointerEnter(PointerEventData eventData)
@@ -59,6 +59,7 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             else if (!zoned && SelectScript.selected)
             {
                 this.transform.parent.GetChild(4).gameObject.SetActive(true);
+                this.transform.parent.GetChild(4).GetComponent<SpriteRenderer>().color = Color.green;
                 zoned = true;
                 nextDayButton.farmid.Add(int.Parse(this.transform.parent.name));
                 GameObject myEventSystem = GameObject.Find("EventSystem");
@@ -95,6 +96,7 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         aux.transform.SetAsLastSibling();
         aux.transform.localPosition = new Vector3(0, 0, 0);
         aux.transform.localScale = new Vector3(.4f, .4f, 1f);
+        SideBarScript.instance.farms[farmID - 1].transform.GetChild(4).GetComponent<SpriteRenderer>().color = Color.white;
 
         float radius = 22.23117306f;//I found it using gizmos :D
         Vector2 pos = GameContext.Farms.GetChild(farmID - 1).position;
