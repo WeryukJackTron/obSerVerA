@@ -18,16 +18,18 @@ public class SelectScript : MonoBehaviour, ISelectHandler, IDeselectHandler
     IEnumerator Deselecting()
     {
         yield return new WaitForSeconds(0.01f);
-        if (tipo == 0)
+        InteractionScript.instance.setInteractionType(0);
+        /*if (tipo == 0)
             selected = false;
         else
             selectedLog = false;
-        print("Hello");
+        print("Hello");*/
         yield return null;
     }
     public void OnSelect(BaseEventData eventData)
     {
-        if (selectedFarm)
+        InteractionScript.instance.setInteractionType(tipo);
+       /* if (selectedFarm)
         {
             GameObject farm = SideBarScript.instance.farms[idFarm - 1];
             if (tipo == 0 && !farm.transform.GetChild(4).gameObject.activeSelf)
@@ -49,16 +51,16 @@ public class SelectScript : MonoBehaviour, ISelectHandler, IDeselectHandler
                 selected = true;
             else
                 selectedLog = true;
-        }
+        }*/
     }
 
     IEnumerator DeselectingFarm(GameObject farm)
     {
         yield return new WaitForSeconds(0.01f);
-        GameContext.Map.SetActive(false);
+        /*GameContext.Map.SetActive(false);
         GameContext.Log.SetActive(true);
         GameContext.Log.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = farm.name;
-        GameContext.Log.GetComponent<TestScript>().UpdateLog();
+        GameContext.Log.GetComponent<TestScript>().UpdateLog();*/
         Debug.Log("SelectScript");
         yield return null;
     }

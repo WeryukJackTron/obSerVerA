@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler
 {
     public GameObject idfarm;
     public float Radius = 22.23117306f;
@@ -36,8 +36,8 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.P))
-            GameContext.Map.transform.GetChild(1).GetChild(3).GetChild(0).GetComponent<SelectScript>().deselectFarm();
+        /*if(Input.GetKeyDown(KeyCode.P))
+            GameContext.Map.transform.GetChild(1).GetChild(3).GetChild(0).GetComponent<SelectScript>().deselectFarm();*/
         if (options && Input.GetMouseButtonDown(0))
         {
             if(this.transform.parent.GetChild(1).gameObject.activeSelf || this.transform.parent.GetChild(3).gameObject.activeSelf)
@@ -58,33 +58,35 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             }
             else if (!zoned && SelectScript.selected)
             {
-                this.transform.parent.GetChild(4).gameObject.SetActive(true);
+                /*this.transform.parent.GetChild(4).gameObject.SetActive(true);
                 this.transform.parent.GetChild(4).GetComponent<SpriteRenderer>().color = Color.green;
                 zoned = true;
                 nextDayButton.farmid.Add(int.Parse(this.transform.parent.name));
                 GameObject myEventSystem = GameObject.Find("EventSystem");
                 myEventSystem.GetComponent<EventSystem>().SetSelectedGameObject(null);
-                StartCoroutine(DelayDeselectFarm());
+                StartCoroutine(DelayDeselectFarm());*/
             }
             else if(SelectScript.selectedLog)
             {
-                GameContext.Map.SetActive(false);
-                GameContext.Log.SetActive(true);
+                /*GameContext.Log.SetActive(true);
                 GameContext.Log.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = this.transform.parent.name;
                 GameContext.Log.GetComponent<TestScript>().UpdateLog();
                 this.gameObject.transform.GetChild(0).gameObject.SetActive(false);
                 SelectScript.selectedLog = false;
-                Debug.Log("FarmsScript");
+                GameContext.Map.transform.GetChild(1).GetChild(3).GetChild(0).GetComponent<SelectScript>().deselectFarm();
+                GameContext.Map.transform.GetChild(1).GetChild(0).GetChild(0).GetComponent<SelectScript>().deselectFarm();
+                GameContext.Map.SetActive(false);*/
             }
         }
     }
 
     IEnumerator DelayDeselectFarm()
     {
-        yield return new WaitForSeconds(0.1f);
-        Debug.Log("Deselected");
+        yield return new WaitForSeconds(0.01f);
+        InteractionScript.instance.setFarmId(0);
+        /*Debug.Log("Deselected");
         GameContext.Map.transform.GetChild(1).GetChild(3).GetChild(0).GetComponent<SelectScript>().deselectFarm();
-        GameContext.Map.transform.GetChild(1).GetChild(0).GetChild(0).GetComponent<SelectScript>().deselectFarm();
+        GameContext.Map.transform.GetChild(1).GetChild(0).GetChild(0).GetComponent<SelectScript>().deselectFarm();*/
         yield return null;
     }
 
@@ -269,6 +271,16 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         //        GameContext.sQuarantineFarms.Add(32);
         //        break;
         //}
+    }
+
+    public void OnDeselect(BaseEventData eventData)
+    {
+        StartCoroutine(DelayDeselectFarm());
+    }
+
+    public void OnSelect(BaseEventData eventData)
+    {
+        InteractionScript.instance.setFarmId(int.Parse(this.transform.parent.name));
     }
 
     //private void OnDrawGizmosSelected()
