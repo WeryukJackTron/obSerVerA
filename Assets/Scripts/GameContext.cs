@@ -6,10 +6,6 @@ using UnityEngine.SceneManagement;
 /// <summary> Class containing static Fields that we want to have global access to.</summary>
 public static class GameContext
 {
-    /// <summary>An array of lists containing log for all farms</summary>
-    /// <example>Use <c>farmID - 1</c> to access the correct farm.</example>
-    public static List<Exchange>[] sLogs = new List<Exchange>[32];
-
     /// <summary>A List containing the IDs of all farms that are under quarantine</summary>
     public static List<ushort> sQuarantineFarms = new List<ushort>();
 
@@ -29,7 +25,13 @@ public static class GameContext
     public static GameObject Zone = null;
 
     /// <summary> Day that we are currently in</summary>
-    public static int sCurrentDay;
+    public static uint sCurrentDay;
+
+    /// <summary> The number of Farms that the game has (and the model should use)</summary>
+    public static int sNumberOfFarms = 32;
+
+    /// <summary> The beta value that the model will use</summary>
+    public static float sBeta = 0.1f;
 
     [RuntimeInitializeOnLoadMethod]
     public static void Init()
@@ -37,17 +39,13 @@ public static class GameContext
         if (SceneManager.GetActiveScene().name != "Map")//Check if scene is the one containing game
             return;
 
-        //Initilize log Lists C# doesn't call default contructor
-        for (int i = 0; i < 32; i++)
-            sLogs[i] = new List<Exchange>();
-
         Map = GameObject.Find("Map");
         Farms = GameObject.Find("Farms").transform;
         Log = GameObject.Find("Canvas").transform.GetChild(1).gameObject;//Lol unity (from tranform to child and then gameobject :P)
         Zone = Resources.Load<GameObject>("Zone");
 
         sCurrentDay = 1;
-        ModelHandler.Init();
+        ModelHandler.Init(7);
     }
 }
 

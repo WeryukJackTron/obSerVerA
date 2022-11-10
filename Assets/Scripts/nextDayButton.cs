@@ -17,7 +17,7 @@ public class nextDayButton : MonoBehaviour
     public void onClick()
     {
         // Get day counter
-        int dayNum = GameContext.sCurrentDay;// += 1;
+        int dayNum = (int)GameContext.sCurrentDay;// += 1;
         Debug.Log("Day " + dayNum);
         if (dayNum == 30)
             SceneManager.LoadScene("End");

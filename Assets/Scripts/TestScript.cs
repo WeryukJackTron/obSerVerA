@@ -47,8 +47,8 @@ public class TestScript : MonoBehaviour
 
     public void UpdateLog()
     {
-        int id = int.Parse(this.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
-        List<Exchange> log = GameContext.sLogs[id - 1];
+        uint id = uint.Parse(this.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
+        List<Exchange> log = ModelHandler.GetLogs(id);
         int j = 9;
         if (log.Count < 9)
         {
@@ -65,7 +65,7 @@ public class TestScript : MonoBehaviour
         {
             grid_log.transform.GetChild(i).gameObject.SetActive(true);
             Exchange exchange = log[i];
-            string line = string.Format("Farm: {0} send to farm: {1} [{2} days ago]", exchange.From, exchange.To, exchange.DaysBefore);
+            string line = string.Format("Farm: {0} send to farm: {1} [{2} days ago]", exchange.From, exchange.To, GameContext.sCurrentDay - exchange.Day);
             grid_log.transform.GetChild(i).GetComponent<TextMeshProUGUI>().text = line;
 
             if (id != exchange.From)
