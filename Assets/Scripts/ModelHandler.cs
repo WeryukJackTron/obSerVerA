@@ -140,6 +140,13 @@ public static class ModelHandler
 
         _RunModel(days);
 
+        if (GameContext.sInfectedFarms.Count > 0)
+        {
+            int index = UnityEngine.Random.Range(0, GameContext.sInfectedFarms.Count);
+            sFarmsObject.GetChild(GameContext.sInfectedFarms[index] - 1).GetChild(1).gameObject.SetActive(true);
+        }
+        else
+            UnityEngine.Debug.Log("No infected farm");
     }
 
     /**
