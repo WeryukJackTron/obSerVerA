@@ -11,6 +11,8 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public float Radius = 22.23117306f;
     public static Sprite Infected = null;
 
+    public static FarmsScript instance;
+
     bool options = false;
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -28,6 +30,7 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // Start is called before the first frame update
     void Start()
     {
+        instance = this;
         idfarm.GetComponent<TextMeshProUGUI>().text = this.gameObject.transform.parent.name;
         if(Infected == null)
             Infected = Resources.Load<Sprite>("Barn_Infected");
@@ -90,8 +93,13 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         yield return null;
     }
 
+    IEnumerator delayVetQuarantine(Transform farm)
+    {
+        yield return new WaitForSeconds(0.01f);
+        farm.GetChild(4).gameObject.SetActive(true);
+    }
 
-    public static void quarantine(int farmID)
+    public void quarantine(int farmID)
     {
         GameObject aux = Instantiate(GameContext.Zone);
         aux.transform.parent = SideBarScript.instance.farms[farmID - 1].transform;
@@ -113,7 +121,10 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             {
                 ushort id = (ushort)(i + 1);
                 if (!GameContext.sQuarantineFarms.Contains(id))
+                {
                     GameContext.sQuarantineFarms.Add(id);
+                    StartCoroutine(delayVetQuarantine(GameContext.Farms.GetChild(i).transform));
+                }
             }
         }
 

@@ -25,7 +25,7 @@ public class nextDayButton : MonoBehaviour
         ModelHandler.Run();
 
         for(int i = 0; i < farmid.Count; i++)
-            FarmsScript.quarantine(farmid[i]);
+            FarmsScript.instance.quarantine(farmid[i]);
 
         farmid.Clear();
         SideBarScript.instance.gameObject.transform.GetChild(3).GetChild(0).GetComponent<Button>().interactable = true;
