@@ -8,7 +8,22 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Map.unity
     guid: 37790fb77ba62fc4090acbd8ca31111d
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/Scenes/End.unity
-    guid: 6e6e92a65e231df44b6b3246c40989a5
+    path: Assets/Scenes/Quad1.unity
+    guid: 6dba9e231a5012b419e8705e641ac190
+  - enabled: 1
+    path: Assets/Scenes/Quad2.unity
+    guid: 7a1c93727a5cb31408c9b5b553908803
+  - enabled: 1
+    path: Assets/Scenes/Quad3.unity
+    guid: 2d7264736f3998e42af639ff96922fac
+  - enabled: 1
+    path: Assets/Scenes/Quad4.unity
+    guid: 8626977d933977d4abb17a55a1a61494
+  - enabled: 1
+    path: Assets/Scenes/WorldMap.unity
+    guid: 95756e3ae54e89948a05850d6ce0d8f5
   m_configObjects: {}

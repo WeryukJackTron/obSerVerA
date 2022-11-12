@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class worldMapInteractions : MonoBehaviour
 {
@@ -22,16 +23,16 @@ public class worldMapInteractions : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            CastRay();
-            Debug.Log(selectedRegion);
-        }
+
     }
 
     void OnMouseOver()
     {
         GetComponent<SpriteRenderer>().color = hoverColor;
+        if (Input.GetMouseButtonDown(0))
+        {
+            CastRay();
+        }
     }
 
     void OnMouseExit()
@@ -46,6 +47,7 @@ public class worldMapInteractions : MonoBehaviour
         if (hit.collider != null)
         {
             selectedRegion = (hit.collider.gameObject.name);
+            SceneManager.LoadScene(selectedRegion);
         }
     }
 
