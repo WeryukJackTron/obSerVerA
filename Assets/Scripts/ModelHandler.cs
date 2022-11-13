@@ -118,7 +118,6 @@ public static class ModelHandler
 
     private static volatile bool sModelRunning = false;
     private static ReaderWriterLock sLock = new ReaderWriterLock();
-    private static Transform sFarmsObject;
     private static Farm[] sFarms = null;
     private static System.Random sRandomEngine = new System.Random();
     private static string sDataPath = null;
@@ -158,15 +157,19 @@ public static class ModelHandler
         return log;
     }
 
+    public static List<ushort> GetInfected()
+    {
+        sLock.AcquireReaderLock(-1);
+        List<ushort> infected = new List<ushort>(sInfectedFarms);
+        sLock.ReleaseReaderLock();
+        return infected;
+    }
+
     /**
      * <summary>Sets up the database and runs the model for the specified number of days</summary>
      */
     public static void Init(uint days)
     {
-        //Find Game object that containing all Farms and cache it for later use
-        sFarmsObject = GameObject.Find("Farms").transform;
-
-        //TODO(Vasilis): Maybe add Thread
         sFarms = new Farm[GameContext.sNumberOfFarms];
         for (int i = 0; i < sFarms.Length; i++)
             sFarms[i] = new Farm((ushort)(i + 1));
@@ -178,17 +181,7 @@ public static class ModelHandler
         {
             sModelRunning = true;
             RunRScript(args);
-
             _RunModel(days);
-
-            //if (sInfectedFarms.Count > 0)
-            //{
-            //    int index = sRandomEngine.Next(0, sInfectedFarms.Count);
-            //    sFarmsObject.GetChild(sInfectedFarms[index] - 1).GetChild(1).gameObject.SetActive(true);
-            //}
-            //else
-            //    UnityEngine.Debug.Log("No infected farm");
-
             sModelRunning = false;
         });
         thread.Start();
@@ -381,7 +374,7 @@ public static class ModelHandler
         dbcon.Close();
     }
 
-    private static void SpreadToFarm(int farm) { sFarmsObject.GetChild(farm - 1).GetChild(3).gameObject.SetActive(true); }
+    //private static void SpreadToFarm(int farm) { sFarmsObject.GetChild(farm - 1).GetChild(3).gameObject.SetActive(true); }
 
 }
 

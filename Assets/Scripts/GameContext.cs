@@ -30,7 +30,7 @@ public static class GameContext
     [RuntimeInitializeOnLoadMethod]
     public static void Init()
     {
-        if (SceneManager.GetActiveScene().name != "Map")//Check if scene is the one containing game
+        if (SceneManager.GetActiveScene().name != "Map" && SceneManager.GetActiveScene().name != "MapWithLoading")//Check if scene is the one containing game
             return;
 
         Map = GameObject.Find("Map");
