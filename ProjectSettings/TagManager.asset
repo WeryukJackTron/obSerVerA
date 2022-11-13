@@ -41,3 +41,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: background
+    uniqueID: 1090197201
+    locked: 0
+  - name: farms
+    uniqueID: 2090625291
+    locked: 0
