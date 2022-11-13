@@ -120,16 +120,16 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             if(dist <= radius)//Farm i+1 is inside the quarantine radius
             {
                 ushort id = (ushort)(i + 1);
-                if (!GameContext.sQuarantineFarms.Contains(id))
+                if (!ModelHandler.IsFarmQuarantine(id))
                 {
-                    GameContext.sQuarantineFarms.Add(id);
+                    ModelHandler.QuarantineFarm(id);
                     StartCoroutine(delayVetQuarantine(GameContext.Farms.GetChild(i).transform));
                 }
             }
         }
 
-        if (!GameContext.sQuarantineFarms.Contains((ushort)farmID))//Also add the farm that was actually specified
-            GameContext.sQuarantineFarms.Add((ushort)farmID);
+        if (!ModelHandler.IsFarmQuarantine((ushort)farmID))//Also add the farm that was actually specified
+            ModelHandler.QuarantineFarm((ushort)farmID);
 
         //switch (farmID)
         //{

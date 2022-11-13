@@ -6,12 +6,6 @@ using UnityEngine.SceneManagement;
 /// <summary> Class containing static Fields that we want to have global access to.</summary>
 public static class GameContext
 {
-    /// <summary>A List containing the IDs of all farms that are under quarantine</summary>
-    public static List<ushort> sQuarantineFarms = new List<ushort>();
-
-    /// <summary>A list containing the IDs of all farms that are infected</summary>
-    public static List<ushort> sInfectedFarms = new List<ushort>();
-
     /// <summary>Reference to the GameObject named Log</summary>
     public static GameObject Log = null;
 
