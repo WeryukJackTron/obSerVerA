@@ -3,6 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary> A collection of flags for what we need to show each farm every time we open a region</summary>
+public struct FarmInfo
+{
+    public bool Exclamation;
+    public bool Infected;
+    public bool Vet;
+
+    public FarmInfo(bool exclamation, bool infected, bool vet)
+    {
+        Exclamation = exclamation;
+        Infected = infected;
+        Vet = vet;
+    }
+}
+
 /// <summary> Class containing static Fields that we want to have global access to.</summary>
 public static class GameContext
 {
@@ -29,6 +44,8 @@ public static class GameContext
 
     /// <summary> The gamma value that the model will use</summary>
     public static float sGamma = 0.077f;
+
+    public static FarmInfo[] sFarmsInfo = new FarmInfo[sNumberOfFarms];
 
     public static void Init()
     {

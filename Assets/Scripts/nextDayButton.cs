@@ -29,20 +29,25 @@ public class nextDayButton : MonoBehaviour
 
         farmid.Clear();
         SideBarScript.instance.gameObject.transform.GetChild(3).GetChild(0).GetComponent<Button>().interactable = true;
-/*
-        Debug.Log("Previously infected farms:");
-        var prev = (GameObject.Find("Farms").GetComponent<spreadDisease>().prevInfectedFarms);
-        Debug.Log(string.Join(", ", prev));
+        /*
+                Debug.Log("Previously infected farms:");
+                var prev = (GameObject.Find("Farms").GetComponent<spreadDisease>().prevInfectedFarms);
+                Debug.Log(string.Join(", ", prev));
 
-        Debug.Log("Currently infected farms:");
-        var curr = (GameObject.Find("Farms").GetComponent<spreadDisease>().currInfectedFarms);
-        Debug.Log(string.Join(", ", curr));
-*/
+                Debug.Log("Currently infected farms:");
+                var curr = (GameObject.Find("Farms").GetComponent<spreadDisease>().currInfectedFarms);
+                Debug.Log(string.Join(", ", curr));
+        */
+        
+        for (int i = 0; i < GameContext.sFarmsInfo.Length; i++)
+            GameContext.sFarmsInfo[i].Vet = false;
+
         for(int i = 0; i < SideBarScript.Farms.Length; i++)
         {
             if (SideBarScript.Farms[i].transform.GetChild(4).gameObject.activeSelf)
             {
                 SideBarScript.Farms[i].transform.GetChild(4).gameObject.SetActive(false);
+                GameContext.sFarmsInfo[i - 1].Vet = false;
                 if (!ModelHandler.IsFarmInfected((ushort)int.Parse(SideBarScript.Farms[i].name)) && SideBarScript.Farms[i].transform.childCount < 6)
                 {
                     SideBarScript.Farms[i].transform.GetChild(2).gameObject.SetActive(true);

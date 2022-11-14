@@ -34,7 +34,7 @@ public class SetupScript : MonoBehaviour
     {
         if(!ModelHandler.IsModelRunning())
         {
-            SceneManager.LoadScene("WorldMap");
+            StartGame();
             return;
         }
 
@@ -52,5 +52,25 @@ public class SetupScript : MonoBehaviour
 
         float z = ProgressBar.eulerAngles.z - Time.deltaTime * AngularVelocity;
         ProgressBar.rotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, z));
+    }
+
+    void StartGame()
+    {
+        for(int i = 0; i < GameContext.sFarmsInfo.Length; i++)
+        {
+            FarmInfo info = new FarmInfo(false, false, false);
+            GameContext.sFarmsInfo[i] = info;
+        }
+
+        List<ushort> infected = ModelHandler.GetInfected();
+        if (infected.Count > 0)
+        {
+            int index = UnityEngine.Random.Range(0, infected.Count);
+            GameContext.sFarmsInfo[infected[index] - 1].Exclamation = true;
+        }
+        else
+            UnityEngine.Debug.Log("Not farm with infection");
+
+        SceneManager.LoadScene("WorldMap");
     }
 }

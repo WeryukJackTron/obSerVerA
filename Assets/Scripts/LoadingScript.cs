@@ -24,7 +24,6 @@ public class LoadingScript : MonoBehaviour
     void Start()
     {
         mHasInitialize = false;
-        
     }
 
     // Update is called once per frame

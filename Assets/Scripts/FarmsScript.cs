@@ -9,7 +9,6 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 {
     public GameObject idfarm;
     public float Radius = 22.23117306f;
-    public static Sprite Infected = null;
 
     public static FarmsScript instance;
 
@@ -32,8 +31,6 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         instance = this;
         idfarm.GetComponent<TextMeshProUGUI>().text = this.gameObject.transform.parent.name;
-        if(Infected == null)
-            Infected = Resources.Load<Sprite>("Barn_Infected");
     }
 
     // Update is called once per frame
@@ -47,10 +44,16 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             {
                 this.transform.parent.GetChild(1).gameObject.SetActive(false);
                 this.transform.parent.GetChild(3).gameObject.SetActive(false);
-                this.transform.parent.GetComponent<SpriteRenderer>().sprite = Infected;
+                this.transform.parent.GetComponent<SpriteRenderer>().sprite = FarmInitScript.Infected;
+                
                 GameObject myEventSystem = GameObject.Find("EventSystem");
                 myEventSystem.GetComponent<EventSystem>().SetSelectedGameObject(null);
                 StartCoroutine(DelayDeselectFarm());
+
+                int index = int.Parse(transform.parent.gameObject.name) - 1;
+                GameContext.sFarmsInfo[index].Infected = true;
+                if (GameContext.sFarmsInfo[index].Exclamation)
+                    GameContext.sFarmsInfo[index].Exclamation = false;
             }
             else if (this.transform.parent.GetChild(2).gameObject.activeSelf)
             {
@@ -97,6 +100,10 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         yield return new WaitForSeconds(0.01f);
         farm.GetChild(4).gameObject.SetActive(true);
+
+        int index = int.Parse(farm.name) - 1;
+        UnityEngine.Debug.Log("Sending vet to: " + (index + 1));
+        GameContext.sFarmsInfo[index].Vet = true;
     }
 
     public void quarantine(int farmID)
@@ -131,14 +138,15 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
         for (int i = 0; i < GameContext.Farms.childCount; i++)//Check which of the farms are inside the quarantine radius
         {
-            if (i == farmID - 1)
+            Transform trans = GameContext.Farms.GetChild(i);
+            if (int.Parse(trans.gameObject.name) == farmID)
                 continue;
 
             Transform child = GameContext.Farms.GetChild(i);
             float dist = Vector2.Distance(pos, child.position);
             if(dist <= radius)//Farm i+1 is inside the quarantine radius
             {
-                ushort id = (ushort)(i + 1);
+                ushort id = ushort.Parse(trans.gameObject.name);
                 if (!ModelHandler.IsFarmQuarantine(id))
                 {
                     ModelHandler.QuarantineFarm(id);

@@ -40,6 +40,8 @@ public class InteractionScript : MonoBehaviour
 
                 gameObject.transform.GetChild(4).gameObject.SetActive(true);
                 gameObject.transform.GetChild(4).GetComponent<SpriteRenderer>().color = Color.green;
+
+                GameContext.sFarmsInfo[idfarm - 1].Vet = true;
             }
             //SideBarScript.instance.farms[idfarm - 1].transform.GetChild(4).gameObject.SetActive(true);
             //SideBarScript.instance.farms[idfarm - 1].transform.GetChild(4).GetComponent<SpriteRenderer>().color = Color.green;

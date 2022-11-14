@@ -49,8 +49,11 @@ public class LogScript : MonoBehaviour
                     if (int.Parse(gameObject.name) != checkboxes[i])
                         continue;
                     Transform transform = gameObject.transform;
-                    if (transform.GetComponent<SpriteRenderer>().sprite != FarmsScript.Infected)
+                    if (transform.GetComponent<SpriteRenderer>().sprite != FarmInitScript.Infected)
+                    {
                         transform.GetChild(4).gameObject.SetActive(true);
+                        GameContext.sFarmsInfo[checkboxes[i] - 1].Vet = true;
+                    }
                     break;
                 }
                 //if (SideBarScript.instance.farms[checkboxes[i] - 1].transform.GetComponent<SpriteRenderer>().sprite != FarmsScript.Infected)
