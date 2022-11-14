@@ -52,10 +52,10 @@ public class LogScript : MonoBehaviour
                     if (transform.GetComponent<SpriteRenderer>().sprite != FarmInitScript.Infected)
                     {
                         transform.GetChild(4).gameObject.SetActive(true);
-                        GameContext.sFarmsInfo[checkboxes[i] - 1].Vet = true;
                     }
                     break;
                 }
+                GameContext.sFarmsInfo[checkboxes[i] - 1].Vet = true;
                 //if (SideBarScript.instance.farms[checkboxes[i] - 1].transform.GetComponent<SpriteRenderer>().sprite != FarmsScript.Infected)
                 //    SideBarScript.instance.farms[checkboxes[i] - 1].transform.GetChild(4).gameObject.SetActive(true);
             }

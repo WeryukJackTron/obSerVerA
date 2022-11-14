@@ -58,7 +58,7 @@ public class SetupScript : MonoBehaviour
     {
         for(int i = 0; i < GameContext.sFarmsInfo.Length; i++)
         {
-            FarmInfo info = new FarmInfo(false, false, false);
+            FarmInfo info = new FarmInfo(false, false, false, false);
             GameContext.sFarmsInfo[i] = info;
         }
 

@@ -175,7 +175,7 @@ public static class ModelHandler
             sFarms[i] = new Farm((ushort)(i + 1));
 
         sDataPath = Application.dataPath;
-        string args = string.Format("-e \"game.FMD::init('{0}/model.sqlite', beta = {1}, gamma = {2}, n = {3})\"", sDataPath, GameContext.sBeta, GameContext.sGamma, GameContext.sNumberOfFarms);
+        string args = string.Format("-e \"game.FMD::init('{0}/model.sqlite', beta = {1}, gamma = {2}, n = {3})\"", sDataPath, GameContext.sBeta.ToString("G", new System.Globalization.CultureInfo("en-US")), GameContext.sGamma.ToString("G", new System.Globalization.CultureInfo("en-US")), GameContext.sNumberOfFarms);
 
         Thread thread = new Thread(() =>
         {
@@ -193,13 +193,14 @@ public static class ModelHandler
      */
     public static void Run(uint days = 1)
     {
-        Thread thread = new Thread(() =>
+        /*Thread thread = new Thread(() =>
         {
             sModelRunning = true;
             _RunModel(days);
             sModelRunning = false;
         });
-        thread.Start();
+        thread.Start();*/
+        _RunModel(days);
     }
 
     /// <summary>Advances all occurrences in the logs by one day</summary>
@@ -333,6 +334,7 @@ public static class ModelHandler
             if (farm.I > 0 && !sInfectedFarms.Contains(farm.ID))
             {
                 sInfectedFarms.Add(farm.ID);
+                UnityEngine.Debug.Log(farm.ID);
                 //SpreadToFarm(farm.ID);
             }
             else if (farm.I == 0 && sInfectedFarms.Contains(farm.ID))
@@ -366,7 +368,6 @@ public static class ModelHandler
         startInfo.Arguments = args;
         Process Rscript = Process.Start(startInfo);
         Rscript.WaitForExit();
-
         if (Rscript.ExitCode != 0)
             UnityEngine.Debug.Log("Rscript failed");
     }

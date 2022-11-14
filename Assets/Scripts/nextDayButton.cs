@@ -38,9 +38,15 @@ public class nextDayButton : MonoBehaviour
                 var curr = (GameObject.Find("Farms").GetComponent<spreadDisease>().currInfectedFarms);
                 Debug.Log(string.Join(", ", curr));
         */
-        
+
         for (int i = 0; i < GameContext.sFarmsInfo.Length; i++)
+        {
+            if (GameContext.sFarmsInfo[i].Vet && ModelHandler.IsFarmInfected((ushort)(i+1)))
+            {
+                GameContext.sFarmsInfo[i].Infected = true;
+            }
             GameContext.sFarmsInfo[i].Vet = false;
+        }
 
         for(int i = 0; i < SideBarScript.Farms.Length; i++)
         {

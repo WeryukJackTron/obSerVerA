@@ -123,10 +123,10 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         aux.transform.SetAsLastSibling();
         aux.transform.localPosition = new Vector3(0, 0, 0);
         aux.transform.localScale = new Vector3(.4f, .4f, 1f);
-        transform.GetChild(4).GetComponent<SpriteRenderer>().color = Color.white;
+        GameContext.sFarmsInfo[farmID - 1].Zone = true;
 
         float radius = 22.23117306f;//I found it using gizmos :D
-        Vector2 pos = new Vector2(0.0f, 0.0f);
+        Vector2 pos = new Vector2(-100000.0f, -100000.0f);
         foreach(Transform trans in GameContext.Farms)
         {
             if (int.Parse(trans.gameObject.name) != farmID)
@@ -135,22 +135,24 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             pos = trans.position;
             break;
         }
-
-        for (int i = 0; i < GameContext.Farms.childCount; i++)//Check which of the farms are inside the quarantine radius
+        if (pos.x != -100000.0f)
         {
-            Transform trans = GameContext.Farms.GetChild(i);
-            if (int.Parse(trans.gameObject.name) == farmID)
-                continue;
-
-            Transform child = GameContext.Farms.GetChild(i);
-            float dist = Vector2.Distance(pos, child.position);
-            if(dist <= radius)//Farm i+1 is inside the quarantine radius
+            for (int i = 0; i < GameContext.Farms.childCount; i++)//Check which of the farms are inside the quarantine radius
             {
-                ushort id = ushort.Parse(trans.gameObject.name);
-                if (!ModelHandler.IsFarmQuarantine(id))
+                Transform trans = GameContext.Farms.GetChild(i);
+                if (int.Parse(trans.gameObject.name) == farmID)
+                    continue;
+
+                Transform child = GameContext.Farms.GetChild(i);
+                float dist = Vector2.Distance(pos, child.position);
+                if (dist <= radius)//Farm i+1 is inside the quarantine radius
                 {
-                    ModelHandler.QuarantineFarm(id);
-                    StartCoroutine(delayVetQuarantine(GameContext.Farms.GetChild(i).transform));
+                    ushort id = ushort.Parse(trans.gameObject.name);
+                    if (!ModelHandler.IsFarmQuarantine(id))
+                    {
+                        ModelHandler.QuarantineFarm(id);
+                        StartCoroutine(delayVetQuarantine(GameContext.Farms.GetChild(i).transform));
+                    }
                 }
             }
         }

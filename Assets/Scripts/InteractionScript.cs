@@ -31,7 +31,7 @@ public class InteractionScript : MonoBehaviour
 
     public void UIinteraction()
     {
-        if(interaction_type == 2 && !zoned)
+        if(interaction_type == 2 && GameContext.sFarmsInfo[idfarm - 1].Zone == false)
         {
             foreach(GameObject gameObject in SideBarScript.Farms)
             {
@@ -45,7 +45,6 @@ public class InteractionScript : MonoBehaviour
             }
             //SideBarScript.instance.farms[idfarm - 1].transform.GetChild(4).gameObject.SetActive(true);
             //SideBarScript.instance.farms[idfarm - 1].transform.GetChild(4).GetComponent<SpriteRenderer>().color = Color.green;
-            zoned = true;
             nextDayButton.farmid.Add(idfarm);
         }
         else if(interaction_type == 1)

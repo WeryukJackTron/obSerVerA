@@ -9,12 +9,14 @@ public struct FarmInfo
     public bool Exclamation;
     public bool Infected;
     public bool Vet;
+    public bool Zone;
 
-    public FarmInfo(bool exclamation, bool infected, bool vet)
+    public FarmInfo(bool exclamation, bool infected, bool vet, bool zone)
     {
         Exclamation = exclamation;
         Infected = infected;
         Vet = vet;
+        Zone = zone;
     }
 }
 
