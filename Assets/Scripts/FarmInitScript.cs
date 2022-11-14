@@ -27,9 +27,11 @@ public class FarmInitScript : MonoBehaviour
         FarmProperty prop = sProps[sNextIndex];
         SideBarScript.Farms[sNextIndex] = gameObject;
         gameObject.name = "" + prop.ID;
-        float x = prop.x / 25000.0f * 1920.0f - 960.0f;
+        float x = prop.x / 25000.0f * (1920.0f - 250.0f) - 960.0f;
         float y = prop.y / 25000.0f * 1080.0f - 540.0f;
-
+        x = Mathf.Max(x, -937.0f);//, 706.0f);
+        y = Mathf.Clamp(y, -490.0f, 515.0f);
+        
         transform.localPosition = new Vector3(x, y, 0);
         sNextIndex++;
     }
