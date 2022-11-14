@@ -237,6 +237,13 @@ public static class ModelHandler
         List<Exchange> events = new List<Exchange>();
         foreach (Farm farm in farms)
         {
+            sLock.AcquireReaderLock(-1);
+            bool isSourceQuarantine = sQuarantineFarms.Contains(farm.ID);
+            sLock.ReleaseReaderLock();
+
+            if (isSourceQuarantine)
+                continue;
+
             double p = sRandomEngine.NextDouble();
             if (p > farm.Intensity)//Check the farm should make a transfer today
                 continue;
@@ -250,6 +257,14 @@ public static class ModelHandler
             foreach (Tuple<ushort, float> friend in farm.Connections)
             {
                 lucklyhood += friend.Item2;
+                
+                sLock.AcquireReaderLock(-1);
+                bool isDestinationQuarantine = sQuarantineFarms.Contains(friend.Item1);
+                sLock.ReleaseReaderLock();
+
+                if (isDestinationQuarantine)
+                    continue;
+
                 if (lucklyhood <= p && !found)
                 {
                     to = friend.Item1;
@@ -262,8 +277,10 @@ public static class ModelHandler
             if (to == 0)//Selected farm means he/she could to anybody so we choose one randomly that is not the same farm or one of it's friends
             {
                 to = (ushort)sRandomEngine.Next(1, GameContext.sNumberOfFarms + 1);
-                while (to == farm.ID || friends.Contains(to))
+                sLock.AcquireReaderLock(-1);
+                while (to == farm.ID || friends.Contains(to) || sQuarantineFarms.Contains(to))
                     to = (ushort)sRandomEngine.Next(1, GameContext.sNumberOfFarms + 1);
+                sLock.ReleaseReaderLock();
             }
 
             Exchange exchange = new Exchange(farm.ID, to, 1, (ushort)GameContext.sCurrentDay);
