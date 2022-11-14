@@ -51,7 +51,7 @@ Rscript --version
 Assuming that you are done with the previous steps this will be very easy you just need to open the command line and use this command:
 
 ```cmd
-Rscript -e "install.packages('game.FMD', repos='https://SVA-SE.github.io/game.FMD')"
+Rscript -e "install.packages('game.FMD', repos=c('https://SVA-SE.github.io/game.FMD', 'https://cloud.r-project.org/'))"
 ```
 
 # Third Party Libraries
