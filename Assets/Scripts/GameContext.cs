@@ -22,24 +22,26 @@ public static class GameContext
     public static uint sCurrentDay;
 
     /// <summary> The number of Farms that the game has (and the model should use)</summary>
-    public static int sNumberOfFarms = 32;
+    public static int sNumberOfFarms = 150;
 
     /// <summary> The beta value that the model will use</summary>
     public static float sBeta = 0.1f;
 
-    [RuntimeInitializeOnLoadMethod]
+    /// <summary> The gamma value that the model will use</summary>
+    public static float sGamma = 0.077f;
+
     public static void Init()
     {
-        if (SceneManager.GetActiveScene().name != "Map" && SceneManager.GetActiveScene().name != "MapWithLoading")//Check if scene is the one containing game
-            return;
+        //if (SceneManager.GetActiveScene().name != "Map" && SceneManager.GetActiveScene().name != "MapWithLoading" && SceneManager.GetActiveScene().name != "RealMap")//Check if scene is the one containing game
+        //    return;
 
         Map = GameObject.Find("Map");
         Farms = GameObject.Find("Farms").transform;
         Log = GameObject.Find("Canvas").transform.GetChild(1).gameObject;//Lol unity (from tranform to child and then gameobject :P)
         Zone = Resources.Load<GameObject>("Zone");
 
-        sCurrentDay = 1;
-        ModelHandler.Init(7);
+        //sCurrentDay = 1;
+        //ModelHandler.Init(7);
     }
 }
 

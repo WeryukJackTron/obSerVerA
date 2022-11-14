@@ -1,8 +1,8 @@
-using System.Collections;
+using Mono.Data.SqliteClient;
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
 
 public struct Coordinate
 {
@@ -15,7 +15,6 @@ public struct Coordinate
         this.y = y;
     }
 }
-
 
 public class worldMapPop : MonoBehaviour
 {
@@ -84,26 +83,55 @@ public class worldMapPop : MonoBehaviour
 
     void genCoordList()
     {
-        List<string> temp = new List<string>();
-        var path = "C:\\Users\\shane\\OneDrive\\Documents\\GitHub\\SVARM\\Assets\\Scripts\\worldMapScripts\\coordinates.txt";
-        foreach (string line in System.IO.File.ReadLines(path))
+        string query = "SELECT x, y FROM ldata;";
+        ExecuteQuery(query, true, (ref IDataReader reader) =>
         {
-            temp.Add(line);
-            string[] tokens = line.Split(',');
-            string x = tokens[0];
-            string y = tokens[1];
+            int x = (int)reader.GetDouble(0);
+            int y = (int)reader.GetDouble(1);
 
-            x = x.Substring(0, x.LastIndexOf("."));
-            y = y.Substring(0, y.LastIndexOf("."));
+            coordsList.Add(new Coordinate(x, y));
+        });
 
-            int xInt = int.Parse(x);
-            int yInt = int.Parse(y);
+        //List<string> temp = new List<string>();
+        //var path = string.Format("{0}/Scripts/worldMapScripts/coordinates.txt", Application.dataPath);
+        //foreach (string line in System.IO.File.ReadLines(path))
+        //{
+        //    temp.Add(line);
+        //    string[] tokens = line.Split(',');
+        //    string x = tokens[0];
+        //    string y = tokens[1];
+        //
+        //    x = x.Substring(0, x.LastIndexOf("."));
+        //    y = y.Substring(0, y.LastIndexOf("."));
+        //
+        //    int xInt = int.Parse(x);
+        //    int yInt = int.Parse(y);
+        //
+        //    Coordinate coordinate = new Coordinate(xInt, yInt);
+        //
+        //    coordsList.Add(coordinate);
+        //}
 
-            Coordinate coordinate = new Coordinate(xInt, yInt);
+    }
 
-            coordsList.Add(coordinate);
+    private static void ExecuteQuery(string query, bool selection = false, ActionRef<IDataReader> action = null)
+    {
+        string connection = string.Format("URI=file:{0}/{1}", Application.dataPath, "model.sqlite");
+        IDbConnection dbcon = new SqliteConnection(connection);
+        dbcon.Open();
+        using (var cmd = dbcon.CreateCommand())
+        {
+            cmd.CommandText = query;
+            if (!selection)
+                cmd.ExecuteNonQuery();
+            else
+            {
+                var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                    action(ref reader);
+            }
         }
-
+        dbcon.Close();
     }
 
 }

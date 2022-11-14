@@ -50,7 +50,7 @@ public class LoadingScript : MonoBehaviour
         float max = mExpanding ? Max : Min;
         img.fillAmount = Mathf.Lerp(min, max, mAccumulatror);
 
-        float z = ProgressBar.eulerAngles.z + Time.deltaTime * AngularVelocity;
+        float z = ProgressBar.eulerAngles.z - Time.deltaTime * AngularVelocity;
         ProgressBar.rotation = Quaternion.Euler(new Vector3(0.0f, 0.0f, z));
     }
 

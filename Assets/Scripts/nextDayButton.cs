@@ -38,18 +38,18 @@ public class nextDayButton : MonoBehaviour
         var curr = (GameObject.Find("Farms").GetComponent<spreadDisease>().currInfectedFarms);
         Debug.Log(string.Join(", ", curr));
 */
-        for(int i = 0; i < SideBarScript.instance.farms.Length; i++)
+        for(int i = 0; i < SideBarScript.Farms.Length; i++)
         {
-            if (SideBarScript.instance.farms[i].transform.GetChild(4).gameObject.activeSelf)
+            if (SideBarScript.Farms[i].transform.GetChild(4).gameObject.activeSelf)
             {
-                SideBarScript.instance.farms[i].transform.GetChild(4).gameObject.SetActive(false);
-                if (!ModelHandler.IsFarmInfected((ushort)int.Parse(SideBarScript.instance.farms[i].name)) && SideBarScript.instance.farms[i].transform.childCount < 6)
+                SideBarScript.Farms[i].transform.GetChild(4).gameObject.SetActive(false);
+                if (!ModelHandler.IsFarmInfected((ushort)int.Parse(SideBarScript.Farms[i].name)) && SideBarScript.Farms[i].transform.childCount < 6)
                 {
-                    SideBarScript.instance.farms[i].transform.GetChild(2).gameObject.SetActive(true);
+                    SideBarScript.Farms[i].transform.GetChild(2).gameObject.SetActive(true);
                 }
-                else if(SideBarScript.instance.farms[i].transform.childCount < 6)
+                else if(SideBarScript.Farms[i].transform.childCount < 6)
                 {
-                    SideBarScript.instance.farms[i].transform.GetChild(3).gameObject.SetActive(true);
+                    SideBarScript.Farms[i].transform.GetChild(3).gameObject.SetActive(true);
                 }
             }
         }

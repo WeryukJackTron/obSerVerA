@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SideBarScript : MonoBehaviour
 {
-    public GameObject[] farms;
+    public static GameObject[] Farms;
     public GameObject farmids;
     public Sprite hide, show;
     public static SideBarScript instance;
@@ -22,10 +23,10 @@ public class SideBarScript : MonoBehaviour
     {
         if (showing)
         {
-            for (int i = 0; i < farms.Length; i++)
+            for (int i = 0; i < Farms.Length; i++)
             {
-                if(!farms[i].transform.GetChild(0).GetChild(0).gameObject.activeSelf)
-                    farms[i].transform.GetChild(0).GetChild(0).gameObject.SetActive(showing);
+                if(!Farms[i].transform.GetChild(0).GetChild(0).gameObject.activeSelf)
+                    Farms[i].transform.GetChild(0).GetChild(0).gameObject.SetActive(showing);
             }
         }
     }
@@ -48,10 +49,17 @@ public class SideBarScript : MonoBehaviour
             showing = true;
         }
         if (!showing)
-            for(int i = 0; i < farms.Length; i++)
+        {
+            for (int i = 0; i < Farms.Length; i++)
             {
-                farms[i].transform.GetChild(0).GetChild(0).gameObject.SetActive(showing);
+                Farms[i].transform.GetChild(0).GetChild(0).gameObject.SetActive(showing);
             }
+        }
+    }
+
+    public void GoToMap()
+    {
+        SceneManager.LoadScene("WorldMap");
     }
 
 }

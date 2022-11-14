@@ -33,8 +33,16 @@ public class InteractionScript : MonoBehaviour
     {
         if(interaction_type == 2 && !zoned)
         {
-            SideBarScript.instance.farms[idfarm - 1].transform.GetChild(4).gameObject.SetActive(true);
-            SideBarScript.instance.farms[idfarm - 1].transform.GetChild(4).GetComponent<SpriteRenderer>().color = Color.green;
+            foreach(GameObject gameObject in SideBarScript.Farms)
+            {
+                if (int.Parse(gameObject.name) != idfarm)
+                    continue;
+
+                gameObject.transform.GetChild(4).gameObject.SetActive(true);
+                gameObject.transform.GetChild(4).GetComponent<SpriteRenderer>().color = Color.green;
+            }
+            //SideBarScript.instance.farms[idfarm - 1].transform.GetChild(4).gameObject.SetActive(true);
+            //SideBarScript.instance.farms[idfarm - 1].transform.GetChild(4).GetComponent<SpriteRenderer>().color = Color.green;
             zoned = true;
             nextDayButton.farmid.Add(idfarm);
         }

@@ -1,10 +1,10 @@
 ﻿using Mono.Data.SqliteClient;
-using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Data;
 using System.Threading;
+using UnityEngine;
 
 /// <summary> Type for callback function that can be using for reading each row form the database </summary>
 delegate void ActionRef<T>(ref T arg);
@@ -175,7 +175,7 @@ public static class ModelHandler
             sFarms[i] = new Farm((ushort)(i + 1));
 
         sDataPath = Application.dataPath;
-        string args = string.Format("-e \"game.FMD::init('{0}/model.sqlite', beta = {1}, n = {2})\"", sDataPath, GameContext.sBeta, GameContext.sNumberOfFarms);
+        string args = string.Format("-e \"game.FMD::init('{0}/model.sqlite', beta = {1}, gamma = {2}, n = {3})\"", sDataPath, GameContext.sBeta, GameContext.sGamma, GameContext.sNumberOfFarms);
 
         Thread thread = new Thread(() =>
         {

@@ -44,8 +44,17 @@ public class LogScript : MonoBehaviour
         {
             if(checkbox[i].text != "" && checkboxes[i] != 0)
             {
-                if (SideBarScript.instance.farms[checkboxes[i] - 1].transform.GetComponent<SpriteRenderer>().sprite != FarmsScript.Infected)
-                    SideBarScript.instance.farms[checkboxes[i] - 1].transform.GetChild(4).gameObject.SetActive(true);
+                foreach(GameObject gameObject in SideBarScript.Farms)
+                {
+                    if (int.Parse(gameObject.name) != checkboxes[i])
+                        continue;
+                    Transform transform = gameObject.transform;
+                    if (transform.GetComponent<SpriteRenderer>().sprite != FarmsScript.Infected)
+                        transform.GetChild(4).gameObject.SetActive(true);
+                    break;
+                }
+                //if (SideBarScript.instance.farms[checkboxes[i] - 1].transform.GetComponent<SpriteRenderer>().sprite != FarmsScript.Infected)
+                //    SideBarScript.instance.farms[checkboxes[i] - 1].transform.GetChild(4).gameObject.SetActive(true);
             }
         }
         resetCheckbox();

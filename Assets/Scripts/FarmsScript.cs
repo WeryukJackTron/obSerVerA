@@ -102,14 +102,33 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public void quarantine(int farmID)
     {
         GameObject aux = Instantiate(GameContext.Zone);
-        aux.transform.parent = SideBarScript.instance.farms[farmID - 1].transform;
+        Transform transform = null;
+        foreach (GameObject gameObject in SideBarScript.Farms)
+        {
+            if (int.Parse(gameObject.name) == farmID)
+            {
+                transform = gameObject.transform;
+                break;
+            }
+        }
+
+        aux.transform.parent = transform;
         aux.transform.SetAsLastSibling();
         aux.transform.localPosition = new Vector3(0, 0, 0);
         aux.transform.localScale = new Vector3(.4f, .4f, 1f);
-        SideBarScript.instance.farms[farmID - 1].transform.GetChild(4).GetComponent<SpriteRenderer>().color = Color.white;
+        transform.GetChild(4).GetComponent<SpriteRenderer>().color = Color.white;
 
         float radius = 22.23117306f;//I found it using gizmos :D
-        Vector2 pos = GameContext.Farms.GetChild(farmID - 1).position;
+        Vector2 pos = new Vector2(0.0f, 0.0f);
+        foreach(Transform trans in GameContext.Farms)
+        {
+            if (int.Parse(trans.gameObject.name) != farmID)
+                continue;
+
+            pos = trans.position;
+            break;
+        }
+
         for (int i = 0; i < GameContext.Farms.childCount; i++)//Check which of the farms are inside the quarantine radius
         {
             if (i == farmID - 1)
