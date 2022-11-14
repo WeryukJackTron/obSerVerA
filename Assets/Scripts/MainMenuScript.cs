@@ -8,7 +8,7 @@ public class MainMenuScript : MonoBehaviour
 
     public void playButton()
     {
-        SceneManager.LoadScene("Map");
+        SceneManager.LoadScene("LoadingScene");
     }
 
 

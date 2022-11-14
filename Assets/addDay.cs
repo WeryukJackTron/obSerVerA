@@ -5,18 +5,17 @@ using TMPro;
 
 public class addDay : MonoBehaviour
 {
-
-    public int day;
     public TextMeshProUGUI dayText;
+    public int day;
 
     void Start()
     {
-        day = 1;
+        //day = 1;
     }
 
     void Update()
     {
-        dayText.text = day.ToString();
+        dayText.text = (GameContext.sCurrentDay - day).ToString();
     }
 
     public void AddDay()
