@@ -33,6 +33,8 @@ public class InteractionScript : MonoBehaviour
     {
         if(interaction_type == 2 && GameContext.sFarmsInfo[idfarm - 1].Zone == false)
         {
+            InfoScript.setIDFarm(idfarm.ToString());
+            InfoScript.instance.GetInfo();
             foreach(GameObject gameObject in SideBarScript.Farms)
             {
                 if (int.Parse(gameObject.name) != idfarm)

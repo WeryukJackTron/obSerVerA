@@ -15,7 +15,7 @@ public class InfoScript : MonoBehaviour
     List<Message> messageList = new List<Message>();
 
     public TextMeshProUGUI myText;
-    string farmID;
+    static string farmID;
 
     public static InfoScript instance;
 
@@ -30,9 +30,20 @@ public class InfoScript : MonoBehaviour
         Debug.Log(G_Variable.SelectedObject.name);
     }
 
+    private void Start()
+    {
+        instance = this;
+        gameObject.SetActive(false);
+    }
+
+    public static void setIDFarm(string id)
+    {
+        farmID = id;
+    }
+
     public void GetInfo()
     {
-        farmID = G_Variable.SelectedObject.transform.parent.gameObject.name;
+        //farmID = G_Variable.SelectedObject.transform.parent.gameObject.name;
         PrintInfo("A  quarantine  zone  is  currently  being  set up  at  farm  " + farmID + ".\n ");
         //Debug.Log("The ID of the farm is" + farmID);
     }

@@ -95,7 +95,7 @@ public class worldMapInteractions : MonoBehaviour
             }
 
             SideBarScript.Farms = new GameObject[props.Count];
-            SceneManager.LoadScene("TestMap");
+            SceneManager.LoadScene("Map");
         }
     }
 
