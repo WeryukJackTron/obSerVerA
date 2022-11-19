@@ -112,6 +112,8 @@ public static class ModelHandler
 {
     /// <summary>A List containing the IDs of all farms that are under quarantine</summary>
     private static List<ushort> sQuarantineFarms = new List<ushort>();
+    public static List<ushort> sUnderInvestigationFarms = new List<ushort>();
+    public static List<ushort> sInfectedVisibleFarms = new List<ushort>();
 
     /// <summary>A list containing the IDs of all farms that are infected</summary>
     private static List<ushort> sInfectedFarms = new List<ushort>();

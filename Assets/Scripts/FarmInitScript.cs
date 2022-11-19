@@ -44,10 +44,16 @@ public class FarmInitScript : MonoBehaviour
             transform.GetChild(1).gameObject.SetActive(true);
 
         if (info.Infected)
+        {
             transform.GetComponent<SpriteRenderer>().sprite = Infected;
+            ModelHandler.sInfectedVisibleFarms.Add((ushort)int.Parse(transform.gameObject.name));
+        }
 
         if (info.Vet)
+        {
             transform.GetChild(4).gameObject.SetActive(true);
+            ModelHandler.sUnderInvestigationFarms.Add((ushort)int.Parse(transform.gameObject.name));
+        }
 
         if (info.Zone)
         {

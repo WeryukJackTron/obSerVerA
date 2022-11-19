@@ -52,6 +52,7 @@ public class LogScript : MonoBehaviour
                     if (transform.GetComponent<SpriteRenderer>().sprite != FarmInitScript.Infected)
                     {
                         transform.GetChild(4).gameObject.SetActive(true);
+                        ModelHandler.sUnderInvestigationFarms.Add((ushort)int.Parse(transform.gameObject.name));
                     }
                     break;
                 }

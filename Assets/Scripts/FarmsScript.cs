@@ -45,7 +45,7 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                 this.transform.parent.GetChild(1).gameObject.SetActive(false);
                 this.transform.parent.GetChild(3).gameObject.SetActive(false);
                 this.transform.parent.GetComponent<SpriteRenderer>().sprite = FarmInitScript.Infected;
-                
+                ModelHandler.sInfectedVisibleFarms.Add((ushort)int.Parse(idfarm.GetComponent<TextMeshProUGUI>().text));
                 GameObject myEventSystem = GameObject.Find("EventSystem");
                 myEventSystem.GetComponent<EventSystem>().SetSelectedGameObject(null);
                 StartCoroutine(DelayDeselectFarm());

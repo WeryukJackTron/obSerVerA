@@ -52,6 +52,7 @@ public class nextDayButton : MonoBehaviour
         {
             if (SideBarScript.Farms[i].transform.GetChild(4).gameObject.activeSelf)
             {
+                ModelHandler.sUnderInvestigationFarms.Remove((ushort)(int.Parse(SideBarScript.Farms[i].name)));
                 SideBarScript.Farms[i].transform.GetChild(4).gameObject.SetActive(false);
                 if (!ModelHandler.IsFarmInfected((ushort)int.Parse(SideBarScript.Farms[i].name)) && SideBarScript.Farms[i].transform.childCount < 6)
                 {
@@ -63,6 +64,7 @@ public class nextDayButton : MonoBehaviour
                 }
             }
         }
+        Debug.Log(ModelHandler.sUnderInvestigationFarms.Count);
     }
 
 }

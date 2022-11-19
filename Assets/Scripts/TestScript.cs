@@ -12,6 +12,8 @@ public class TestScript : MonoBehaviour
     public Grid paco;*/
     public GameObject grid_log;
     public GameObject confirm, reset;
+    public Sprite InfectedFarmLog, FarmLog;
+    public GameObject progressbar;
     public static TestScript instance;
     // Start is called before the first frame update
     void Start()
@@ -98,5 +100,26 @@ public class TestScript : MonoBehaviour
         //{
         //    grid_log.transform.GetChild(i).GetChild(1).gameObject.SetActive(!grid_log.transform.GetChild(i).GetChild(1).gameObject.activeSelf);
         //}
+    }
+
+    public void checkFarm()
+    {
+        ushort farmid = (ushort)int.Parse(gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
+        if (ModelHandler.sInfectedVisibleFarms.Contains(farmid))
+        {
+            gameObject.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = InfectedFarmLog;
+        }
+        else
+        {
+            gameObject.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = FarmLog;
+        }
+        if (ModelHandler.sUnderInvestigationFarms.Contains(farmid))
+        {
+            progressbar.SetActive(true);
+        }
+        else
+        {
+            progressbar.SetActive(false);
+        }
     }
 }
