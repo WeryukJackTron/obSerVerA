@@ -19,8 +19,8 @@ EditorBuildSettings:
     guid: ffc2124bc9325ed41950df17097c70f5
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
-    guid: b38f36215e47ed44e826f1ce9bad839b
+    guid: 2a92bfb05c51a6840a10c3e5fed82867
   - enabled: 1
-    path: Assets/Scenes/TestMap.unity
-    guid: cd5b7a25b7e9b8648bb4b44dd33a4c8f
+    path: Assets/Scenes/End.unity
+    guid: 7f7920b908d1e3d4fb7e12ccc9a00e87
   m_configObjects: {}

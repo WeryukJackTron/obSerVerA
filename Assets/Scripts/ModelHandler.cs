@@ -20,15 +20,15 @@ public struct Exchange
     /// <summary>ID of the farm where the cattle was send.</summary>
     public ushort To;
     /// <summary>Number of cattle that was transfered on this exchange.</summary>
-    public ushort N;//TODO(Vasilis): Maybe change to propotions
+    public float Propotion;
     /// <summary>Day on which the exchange occuried.</summary>
     public ushort Day;
 
-    public Exchange(ushort from, ushort to, ushort n, ushort day)
+    public Exchange(ushort from, ushort to, float propotion, ushort day)
     {
         From = from;
         To = to;
-        N = n;
+        Propotion = propotion;
         Day = day;
     }
 }
@@ -284,7 +284,8 @@ public static class ModelHandler
                 sLock.ReleaseReaderLock();
             }
 
-            Exchange exchange = new Exchange(farm.ID, to, 1, (ushort)GameContext.sCurrentDay);
+            float propotion = sRandomEngine.Next(1, 11) / 100.0f;
+            Exchange exchange = new Exchange(farm.ID, to, propotion, (ushort)GameContext.sCurrentDay);
             events.Add(exchange);
 
             Farm src = farms[(int)farm.ID - 1];
@@ -296,7 +297,7 @@ public static class ModelHandler
 
         foreach (Exchange exchange in events)
         {
-            string query = string.Format("INSERT INTO events (event, time, node, dest, n, proportion, 'select', shift) VALUES(\"extTrans\", {0}, {1}, {2}, {3}, 0.0, 4, 0);", GameContext.sCurrentDay, exchange.From, exchange.To, 1);
+            string query = string.Format("INSERT INTO events (event, time, node, dest, n, proportion, 'select', shift) VALUES(\"extTrans\", {0}, {1}, {2}, 0, {3}, 4, 0);", GameContext.sCurrentDay, exchange.From, exchange.To, exchange.Propotion);
             ExecuteQuery(query);
         }
 
