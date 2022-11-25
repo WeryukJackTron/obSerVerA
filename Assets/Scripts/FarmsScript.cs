@@ -12,6 +12,8 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public static FarmsScript instance;
 
+    InfoScript infoScript; //Added by Petter
+
     bool options = false;
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -31,6 +33,8 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         instance = this;
         idfarm.GetComponent<TextMeshProUGUI>().text = this.gameObject.transform.parent.name;
+
+        infoScript = GameObject.FindGameObjectWithTag("Info").GetComponent<InfoScript>(); //Added by Petter
     }
 
     // Update is called once per frame
@@ -46,6 +50,8 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                 this.transform.parent.GetChild(3).gameObject.SetActive(false);
                 this.transform.parent.GetComponent<SpriteRenderer>().sprite = FarmInitScript.Infected;
                 ModelHandler.sInfectedVisibleFarms.Add((ushort)int.Parse(idfarm.GetComponent<TextMeshProUGUI>().text));
+                //infoScript.PrintInfo("Farm " + transform.parent.gameObject.name + " is infected."); //Added by Petter
+                infoScript.PrintInfected("- Farm " + transform.parent.gameObject.name + " is infected.");
                 GameObject myEventSystem = GameObject.Find("EventSystem");
                 myEventSystem.GetComponent<EventSystem>().SetSelectedGameObject(null);
                 StartCoroutine(DelayDeselectFarm());
@@ -58,6 +64,8 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             else if (this.transform.parent.GetChild(2).gameObject.activeSelf)
             {
                 this.transform.parent.GetChild(2).gameObject.SetActive(false);
+                //infoScript.PrintInfo("Farm " + transform.parent.gameObject.name + " is clear."); //Added by Petter
+                infoScript.PrintClean("- Farm " + transform.parent.gameObject.name + " is not infected.");
                 GameObject myEventSystem = GameObject.Find("EventSystem");
                 myEventSystem.GetComponent<EventSystem>().SetSelectedGameObject(null);
                 StartCoroutine(DelayDeselectFarm());
@@ -103,6 +111,8 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
         int index = int.Parse(farm.name) - 1;
         UnityEngine.Debug.Log("Sending vet to: " + (index + 1));
+        //infoScript.PrintInfo("A vet has been sent to " + farm.name + "."); //Added by Petter
+        infoScript.PrintVets("- A vet has been sent to farm " + farm.name + ".");
         GameContext.sFarmsInfo[index].Vet = true;
     }
 

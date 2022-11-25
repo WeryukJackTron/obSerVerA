@@ -8,10 +8,13 @@ public class LogScript : MonoBehaviour
     public List<TextMeshProUGUI> checkbox;
 
     public static LogScript instance;
+
+    InfoScript infoScript; // Added by Petter
     // Start is called before the first frame update
     void Start()
     {
         instance = this;
+        infoScript = GameObject.FindGameObjectWithTag("Info").GetComponent<InfoScript>(); // Added by Petter
     }
 
     // Update is called once per frame
@@ -52,6 +55,7 @@ public class LogScript : MonoBehaviour
                     if (transform.GetComponent<SpriteRenderer>().sprite != FarmInitScript.Infected)
                     {
                         transform.GetChild(4).gameObject.SetActive(true);
+                        infoScript.PrintVets("- A vet has been sent to " + gameObject.name + "."); // Added by Petter
                         ModelHandler.sUnderInvestigationFarms.Add((ushort)int.Parse(transform.gameObject.name));
                     }
                     break;

@@ -21,6 +21,7 @@ public class FarmInitScript : MonoBehaviour
     public static Sprite Infected = null;
     public static int sNextIndex;
     public static FarmProperty[] sProps;
+    //InfoScript infoScript;
 
     // Start is called before the first frame update
     void Start()
@@ -47,6 +48,7 @@ public class FarmInitScript : MonoBehaviour
         {
             transform.GetComponent<SpriteRenderer>().sprite = Infected;
             ModelHandler.sInfectedVisibleFarms.Add((ushort)int.Parse(transform.gameObject.name));
+            //infoScript.PrintInfo(transform.gameObject.name);
         }
 
         if (info.Vet)
