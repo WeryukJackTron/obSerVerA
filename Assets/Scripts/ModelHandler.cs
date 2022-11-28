@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Data;
 using System.Threading;
 using UnityEngine;
+using System.Numerics;
 
 /// <summary> Type for callback function that can be using for reading each row form the database </summary>
 delegate void ActionRef<T>(ref T arg);
@@ -122,6 +123,12 @@ public static class ModelHandler
     private static System.Random sRandomEngine = new System.Random();
     private static string sDataPath = null;
 
+    private static volatile bool sLoseFlag = false;
+    private static volatile bool sWinFlag = false; 
+
+    public static bool HasWon() { return sWinFlag; }
+    public static bool HasLost() { return sLoseFlag; }
+
     public static bool IsModelRunning() { return sModelRunning; }
 
     public static bool IsFarmQuarantine(ushort farmID)
@@ -139,7 +146,6 @@ public static class ModelHandler
         sLock.ReleaseReaderLock();
         return value;
     }
-
 
     public static void QuarantineFarm(ushort farmID)
     {
@@ -165,6 +171,34 @@ public static class ModelHandler
         return infected;
     }
 
+    public static List<ushort> GetWhoCalled()
+    {
+        List<ushort> ids = new List<ushort>();
+        
+        sLock.AcquireReaderLock(-1);
+        foreach (ushort farmID in sInfectedFarms)
+        {
+            if (sQuarantineFarms.Contains(farmID))
+                continue;
+
+            Farm farm = sFarms[farmID - 1];
+            if (farm.I == 0)
+                continue;
+
+            long N = farm.S + farm.I + farm.R;
+            double p = 0.5 * farm.I / N;//P(T+)
+            p = 1.0 - Math.Pow(1.0 - p, N);//P(call_vet)
+            double q = 1.0 - p;
+
+            double result = N * p * Math.Pow(q, N - 1);//Binomial
+            if (sRandomEngine.NextDouble() <= result)
+                ids.Add(farmID);
+        }
+        sLock.ReleaseReaderLock();
+        
+        return ids;
+    }
+
     /**
      * <summary>Sets up the database and runs the model for the specified number of days</summary>
      */
@@ -177,9 +211,9 @@ public static class ModelHandler
         sDataPath = Application.dataPath;
         string args = string.Format("-e \"game.FMD::init('{0}/model.sqlite', beta = {1}, gamma = {2}, n = {3})\"", sDataPath, GameContext.sBeta.ToString("G", new System.Globalization.CultureInfo("en-US")), GameContext.sGamma.ToString("G", new System.Globalization.CultureInfo("en-US")), GameContext.sNumberOfFarms);
 
+        sModelRunning = true;
         Thread thread = new Thread(() =>
         {
-            sModelRunning = true;
             RunRScript(args);
             _RunModel(days);
             sModelRunning = false;
@@ -341,6 +375,17 @@ public static class ModelHandler
             else if (farm.I == 0 && sInfectedFarms.Contains(farm.ID))
                 sInfectedFarms.Remove(farm.ID);
         }
+
+        sLoseFlag = ((float)sInfectedFarms.Count / GameContext.sNumberOfFarms) >= 0.5f;
+        sWinFlag = true;
+        foreach(ushort farmID in sInfectedFarms)
+        {
+            if(!sQuarantineFarms.Contains(farmID))
+            {
+                sWinFlag = false;
+                break;
+            }
+        }
         sLock.ReleaseWriterLock();
     }
 
@@ -361,6 +406,7 @@ public static class ModelHandler
 
     private static void RunRScript(string args)
     {
+        GameContext.LogToFile("Running: Rscript.exe" + args);
         ProcessStartInfo startInfo = new ProcessStartInfo();
         startInfo.FileName = "Rscript.exe";
         startInfo.RedirectStandardOutput = true;//Although not need it
@@ -370,7 +416,24 @@ public static class ModelHandler
         Process Rscript = Process.Start(startInfo);
         Rscript.WaitForExit();
         if (Rscript.ExitCode != 0)
+        {
             UnityEngine.Debug.Log("Rscript failed");
+            GameContext.LogToFile("Fail executing: Rscript.exe" + args);
+            //Log Standard output
+            GameContext.LogToFile("stdout:");
+            while(!Rscript.StandardOutput.EndOfStream)
+            {
+                string line = string.Format("\t{0}", Rscript.StandardOutput.ReadLine());
+                GameContext.LogToFile(line);
+            }
+            //Log Standard error
+            GameContext.LogToFile("stderr:");
+            while (!Rscript.StandardError.EndOfStream)
+            {
+                string line = string.Format("\t{0}", Rscript.StandardError.ReadLine());
+                GameContext.LogToFile(line);
+            }
+        }
     }
 
     private static void ExecuteQuery(string query, bool selection = false, ActionRef<IDataReader> action = null)

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Numerics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -51,16 +53,19 @@ public static class GameContext
 
     public static void Init()
     {
-        //if (SceneManager.GetActiveScene().name != "Map" && SceneManager.GetActiveScene().name != "MapWithLoading" && SceneManager.GetActiveScene().name != "RealMap")//Check if scene is the one containing game
-        //    return;
-
         Map = GameObject.Find("Map");
         Farms = GameObject.Find("Farms").transform;
         Log = GameObject.Find("Canvas").transform.GetChild(1).gameObject;//Lol unity (from tranform to child and then gameobject :P)
         Zone = Resources.Load<GameObject>("Zone");
-
-        //sCurrentDay = 1;
-        //ModelHandler.Init(7);
     }
+
+    public static void LogToFile(string line)
+    {
+        string filepath = Application.dataPath + "/script.log";
+        if (!File.Exists(filepath))
+            File.CreateText(filepath);
+        File.AppendAllLines(filepath, new []{ line });
+    }
+
 }
 
