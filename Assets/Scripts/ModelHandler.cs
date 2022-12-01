@@ -121,14 +121,12 @@ public static class ModelHandler
     private static ReaderWriterLock sLock = new ReaderWriterLock();
     private static Farm[] sFarms = null;
     private static System.Random sRandomEngine = new System.Random();
-    private static string sDataPath = null;
 
     private static volatile bool sLoseFlag = false;
     private static volatile bool sWinFlag = false; 
 
     public static bool HasWon() { return sWinFlag; }
     public static bool HasLost() { return sLoseFlag; }
-
     public static bool IsModelRunning() { return sModelRunning; }
 
     public static bool IsFarmQuarantine(ushort farmID)
@@ -182,17 +180,32 @@ public static class ModelHandler
                 continue;
 
             Farm farm = sFarms[farmID - 1];
-            if (farm.I == 0)
-                continue;
+            //if (farm.I == 0)
+            //    continue;
 
-            long N = farm.S + farm.I + farm.R;
-            double p = 0.5 * farm.I / N;//P(T+)
-            p = 1.0 - Math.Pow(1.0 - p, N);//P(call_vet)
-            double q = 1.0 - p;
-
-            double result = N * p * Math.Pow(q, N - 1);//Binomial
-            if (sRandomEngine.NextDouble() <= result)
+            const double p = 0.1;
+            if (sRandomEngine.NextDouble() <= p)
                 ids.Add(farmID);
+            //long N = farm.S + farm.I + farm.R;
+            //double p = 0.25 * farm.I / N;//P(T+)
+            //p = 1.0 - Math.Pow(1.0 - p, N);//P(call_vet)
+            //string str = string.Format("Farm {0} chance: {1}", farmID, p);
+            //UnityEngine.Debug.Log(str);
+            //for (int i = 0; i < farm.I; i++)
+            //{
+            //    if(sRandomEngine.NextDouble() <= p)
+            //    {
+            //        ids.Add(farm.ID);
+            //        break;
+            //    }
+            //}
+            //double q = 1.0 - p;
+            //
+            //double result = N * p * Math.Pow(q, N - 1);//Binomial
+            //string str = string.Format("Farm {0} has a chance of calling SVA: {1}", farmID, result);
+            //UnityEngine.Debug.Log(str);
+            //if (sRandomEngine.NextDouble() <= result)
+            //    ids.Add(farmID);
         }
         sLock.ReleaseReaderLock();
         
@@ -208,13 +221,14 @@ public static class ModelHandler
         for (int i = 0; i < sFarms.Length; i++)
             sFarms[i] = new Farm((ushort)(i + 1));
 
-        sDataPath = Application.dataPath;
-        string args = string.Format("-e \"game.FMD::init('{0}/model.sqlite', beta = {1}, gamma = {2}, n = {3})\"", sDataPath, GameContext.sBeta.ToString("G", new System.Globalization.CultureInfo("en-US")), GameContext.sGamma.ToString("G", new System.Globalization.CultureInfo("en-US")), GameContext.sNumberOfFarms);
+        GameContext.sDataPath = Application.dataPath;
+        string args = string.Format("-e \"game.FMD::init('{0}/model.sqlite', beta = {1}, gamma = {2}, n = {3})\"", GameContext.sDataPath, GameContext.sBeta.ToString("G", new System.Globalization.CultureInfo("en-US")), GameContext.sGamma.ToString("G", new System.Globalization.CultureInfo("en-US")), GameContext.sNumberOfFarms);
 
         sModelRunning = true;
         Thread thread = new Thread(() =>
         {
             RunRScript(args);
+            SetInitState();
             _RunModel(days);
             sModelRunning = false;
         });
@@ -270,6 +284,7 @@ public static class ModelHandler
         sLock.ReleaseReaderLock();
 
         List<Exchange> events = new List<Exchange>();
+        List<Tuple<ushort, ushort>> ex = new List<Tuple<ushort, ushort>>();
         foreach (Farm farm in farms)
         {
             sLock.AcquireReaderLock(-1);
@@ -325,6 +340,7 @@ public static class ModelHandler
             Farm src = farms[(int)farm.ID - 1];
             Farm dst = farms[(int)to - 1];
 
+            ex.Add(new Tuple<ushort, ushort>(src.ID, dst.ID));
             src.Logs.Add(exchange);
             dst.Logs.Add(exchange);
         }
@@ -340,6 +356,23 @@ public static class ModelHandler
         for (int i = 0; i < farms.Count; i++)
             sFarms[i].Logs = farms[i].Logs;
         sLock.ReleaseWriterLock();
+
+        {//Debuging only
+            string str = "[";
+            if (ex.Count > 0)
+            {
+                for (int i = 0; i < ex.Count - 1; i++)
+                {
+                    Tuple<ushort, ushort> aux = ex[i];
+                    str += aux.Item1 + "=>" + aux.Item2 + ", ";
+                }
+                Tuple<ushort, ushort> temp = ex[ex.Count - 1];
+                str += temp.Item1 + "=>" + temp.Item2 + "]";
+            }
+            else
+                str += ']';
+            UnityEngine.Debug.Log("Exchanges: " + str);
+        }
     }
 
     private static void UpdateFarms()
@@ -369,7 +402,6 @@ public static class ModelHandler
             if (farm.I > 0 && !sInfectedFarms.Contains(farm.ID))
             {
                 sInfectedFarms.Add(farm.ID);
-                UnityEngine.Debug.Log(farm.ID);
                 //SpreadToFarm(farm.ID);
             }
             else if (farm.I == 0 && sInfectedFarms.Contains(farm.ID))
@@ -387,6 +419,19 @@ public static class ModelHandler
             }
         }
         sLock.ReleaseWriterLock();
+
+        {//Debuging only
+            string str = "[";
+            if (sInfectedFarms.Count > 0)
+            {
+                for (int i = 0; i < sInfectedFarms.Count - 1; i++)
+                    str += sInfectedFarms[i] + ", ";
+                str += sInfectedFarms[sInfectedFarms.Count - 1] + "]";
+            }
+            else
+                str += ']';
+            UnityEngine.Debug.Log("Infected {" + sInfectedFarms.Count + "}: " + str);
+        }
     }
 
     private static void _RunModel(uint days = 1)
@@ -396,11 +441,13 @@ public static class ModelHandler
         {
             AdvanceLogs();
             CreateEvents();
-            string args = string.Format("-e \"game.FMD::run('{0}/model.sqlite')\"", sDataPath);
+            string args = string.Format("-e \"game.FMD::run('{0}/model.sqlite')\"", GameContext.sDataPath);
             RunRScript(args);
             UpdateFarms();
 
             GameContext.sCurrentDay++;
+            if (sInfectedFarms.Count >= 10)
+                break;
         }
     }
 
@@ -436,9 +483,31 @@ public static class ModelHandler
         }
     }
 
+    private static void SetInitState()
+    {
+        string query = "UPDATE U SET I = 0;";
+        ExecuteQuery(query);
+
+        int farm1 = sRandomEngine.Next(1, 151);
+        int farm2 = sRandomEngine.Next(1, 151);
+        int farm3 = sRandomEngine.Next(1, 151);
+
+        while (farm1 == farm2 || farm2 == farm3)
+            farm2 = sRandomEngine.Next(1, 151);
+        while (farm1 == farm3)
+            farm3 = sRandomEngine.Next(1, 151);
+
+        query = string.Format("UPDATE U set I = {0} WHERE node = {1};", sRandomEngine.Next(5, 11), farm1);
+        ExecuteQuery(query);
+        query = string.Format("UPDATE U set I = {0} WHERE node = {1};", sRandomEngine.Next(5, 11), farm2);
+        ExecuteQuery(query);
+        query = string.Format("UPDATE U set I = {0} WHERE node = {1};", sRandomEngine.Next(5, 11), farm3);
+        ExecuteQuery(query);
+    }
+
     private static void ExecuteQuery(string query, bool selection = false, ActionRef<IDataReader> action = null)
     {
-        string connection = string.Format("URI=file:{0}/{1}", sDataPath, "model.sqlite");
+        string connection = string.Format("URI=file:{0}/{1}", GameContext.sDataPath, "model.sqlite");
         IDbConnection dbcon = new SqliteConnection(connection);
         dbcon.Open();
         using (var cmd = dbcon.CreateCommand())

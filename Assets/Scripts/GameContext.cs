@@ -49,6 +49,9 @@ public static class GameContext
     /// <summary> The gamma value that the model will use</summary>
     public static float sGamma = 0.077f;
 
+    public static string sDataPath = null;
+
+
     public static FarmInfo[] sFarmsInfo = new FarmInfo[sNumberOfFarms];
 
     public static void Init()
@@ -61,7 +64,7 @@ public static class GameContext
 
     public static void LogToFile(string line)
     {
-        string filepath = Application.dataPath + "/script.log";
+        string filepath = sDataPath + "/script.log";
         if (!File.Exists(filepath))
             File.CreateText(filepath);
         File.AppendAllLines(filepath, new []{ line });
