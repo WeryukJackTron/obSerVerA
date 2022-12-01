@@ -5,22 +5,25 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler
+public class FarmsScript : MonoBehaviour
 {
     public GameObject idfarm;
+    public SpriteRenderer highlight;
     public float Radius = 22.23117306f;
 
     public static FarmsScript instance;
 
     bool options = false;
-    public void OnPointerEnter(PointerEventData eventData)
+    public void OnMouseOver()
     {
+        highlight.enabled = true;
         idfarm.SetActive(true);
         options = true;
     }
 
-    public void OnPointerExit(PointerEventData eventData)
+    public void OnMouseExit()
     {
+        highlight.enabled = false;
         idfarm.SetActive(false);
         options = false;
     }
@@ -30,7 +33,7 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     void Start()
     {
         instance = this;
-        idfarm.GetComponent<TextMeshProUGUI>().text = this.gameObject.transform.parent.name;
+        idfarm.GetComponent<TextMeshPro>().text = this.gameObject.transform.parent.name;
     }
 
     // Update is called once per frame
@@ -38,50 +41,60 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         /*if(Input.GetKeyDown(KeyCode.P))
             GameContext.Map.transform.GetChild(1).GetChild(3).GetChild(0).GetComponent<SelectScript>().deselectFarm();*/
-        if (options && Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
-            if(this.transform.parent.GetChild(1).gameObject.activeSelf || this.transform.parent.GetChild(3).gameObject.activeSelf)
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
+            if (hit.collider != null && options && hit.collider.transform.parent.gameObject.name == this.transform.parent.gameObject.name)
             {
-                this.transform.parent.GetChild(1).gameObject.SetActive(false);
-                this.transform.parent.GetChild(3).gameObject.SetActive(false);
-                this.transform.parent.GetComponent<SpriteRenderer>().sprite = FarmInitScript.Infected;
-                
-                GameObject myEventSystem = GameObject.Find("EventSystem");
-                myEventSystem.GetComponent<EventSystem>().SetSelectedGameObject(null);
-                StartCoroutine(DelayDeselectFarm());
+                InteractionScript.instance.setFarmId(int.Parse(this.transform.parent.name));
+                if (this.transform.parent.GetChild(1).gameObject.activeSelf || this.transform.parent.GetChild(3).gameObject.activeSelf)
+                {
+                    this.transform.parent.GetChild(1).gameObject.SetActive(false);
+                    this.transform.parent.GetChild(3).gameObject.SetActive(false);
+                    this.transform.parent.GetComponent<SpriteRenderer>().sprite = FarmInitScript.Infected;
 
-                int index = int.Parse(transform.parent.gameObject.name) - 1;
-                GameContext.sFarmsInfo[index].Infected = true;
-                if (GameContext.sFarmsInfo[index].Exclamation)
-                    GameContext.sFarmsInfo[index].Exclamation = false;
+                    GameObject myEventSystem = GameObject.Find("EventSystem");
+                    myEventSystem.GetComponent<EventSystem>().SetSelectedGameObject(null);
+                    StartCoroutine(DelayDeselectFarm());
+
+                    int index = int.Parse(transform.parent.gameObject.name) - 1;
+                    GameContext.sFarmsInfo[index].Infected = true;
+                    if (GameContext.sFarmsInfo[index].Exclamation)
+                        GameContext.sFarmsInfo[index].Exclamation = false;
+                }
+                else if (this.transform.parent.GetChild(2).gameObject.activeSelf)
+                {
+                    this.transform.parent.GetChild(2).gameObject.SetActive(false);
+                    GameObject myEventSystem = GameObject.Find("EventSystem");
+                    myEventSystem.GetComponent<EventSystem>().SetSelectedGameObject(null);
+                    StartCoroutine(DelayDeselectFarm());
+                }
+                else if (!zoned && SelectScript.selected)
+                {
+                    /*this.transform.parent.GetChild(4).gameObject.SetActive(true);
+                    this.transform.parent.GetChild(4).GetComponent<SpriteRenderer>().color = Color.green;
+                    zoned = true;
+                    nextDayButton.farmid.Add(int.Parse(this.transform.parent.name));
+                    GameObject myEventSystem = GameObject.Find("EventSystem");
+                    myEventSystem.GetComponent<EventSystem>().SetSelectedGameObject(null);
+                    StartCoroutine(DelayDeselectFarm());*/
+                }
+                else if (SelectScript.selectedLog)
+                {
+                    /*GameContext.Log.SetActive(true);
+                    GameContext.Log.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = this.transform.parent.name;
+                    GameContext.Log.GetComponent<TestScript>().UpdateLog();
+                    this.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+                    SelectScript.selectedLog = false;
+                    GameContext.Map.transform.GetChild(1).GetChild(3).GetChild(0).GetComponent<SelectScript>().deselectFarm();
+                    GameContext.Map.transform.GetChild(1).GetChild(0).GetChild(0).GetComponent<SelectScript>().deselectFarm();
+                    GameContext.Map.SetActive(false);*/
+                }
             }
-            else if (this.transform.parent.GetChild(2).gameObject.activeSelf)
+            else if(hit.collider == null)
             {
-                this.transform.parent.GetChild(2).gameObject.SetActive(false);
-                GameObject myEventSystem = GameObject.Find("EventSystem");
-                myEventSystem.GetComponent<EventSystem>().SetSelectedGameObject(null);
                 StartCoroutine(DelayDeselectFarm());
-            }
-            else if (!zoned && SelectScript.selected)
-            {
-                /*this.transform.parent.GetChild(4).gameObject.SetActive(true);
-                this.transform.parent.GetChild(4).GetComponent<SpriteRenderer>().color = Color.green;
-                zoned = true;
-                nextDayButton.farmid.Add(int.Parse(this.transform.parent.name));
-                GameObject myEventSystem = GameObject.Find("EventSystem");
-                myEventSystem.GetComponent<EventSystem>().SetSelectedGameObject(null);
-                StartCoroutine(DelayDeselectFarm());*/
-            }
-            else if(SelectScript.selectedLog)
-            {
-                /*GameContext.Log.SetActive(true);
-                GameContext.Log.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = this.transform.parent.name;
-                GameContext.Log.GetComponent<TestScript>().UpdateLog();
-                this.gameObject.transform.GetChild(0).gameObject.SetActive(false);
-                SelectScript.selectedLog = false;
-                GameContext.Map.transform.GetChild(1).GetChild(3).GetChild(0).GetComponent<SelectScript>().deselectFarm();
-                GameContext.Map.transform.GetChild(1).GetChild(0).GetChild(0).GetComponent<SelectScript>().deselectFarm();
-                GameContext.Map.SetActive(false);*/
             }
         }
     }
@@ -312,7 +325,7 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         //        break;
         //}
     }
-
+    /*
     public void OnDeselect(BaseEventData eventData)
     {
         StartCoroutine(DelayDeselectFarm());
@@ -321,7 +334,7 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public void OnSelect(BaseEventData eventData)
     {
         InteractionScript.instance.setFarmId(int.Parse(this.transform.parent.name));
-    }
+    }*/
 
     //private void OnDrawGizmosSelected()
     //{

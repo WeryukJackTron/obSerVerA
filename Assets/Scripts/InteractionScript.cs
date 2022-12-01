@@ -52,7 +52,7 @@ public class InteractionScript : MonoBehaviour
         else if(interaction_type == 1)
         {
             GameContext.Log.SetActive(true);
-            GameContext.Log.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = idfarm.ToString();
+            GameContext.Log.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = idfarm.ToString();
             GameContext.Log.GetComponent<TestScript>().UpdateLog();
             GameContext.Map.SetActive(false);
         }

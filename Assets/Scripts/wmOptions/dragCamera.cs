@@ -12,6 +12,7 @@ public class dragCamera : MonoBehaviour
     public float maxY;
     public float minX;
     public float minY;
+    public Camera camera;
 
     Vector3 pos;
 
@@ -20,11 +21,11 @@ public class dragCamera : MonoBehaviour
     {
         if (Input.GetMouseButton(0))
         {
-            Difference = (Camera.main.ScreenToWorldPoint(Input.mousePosition)) - Camera.main.transform.position;
+            Difference = (camera.ScreenToWorldPoint(Input.mousePosition)) - camera.transform.position;
             if (Drag == false)
             {
                 Drag = true;
-                Origin = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Origin = camera.ScreenToWorldPoint(Input.mousePosition);
             }     
         }
         else
@@ -37,7 +38,7 @@ public class dragCamera : MonoBehaviour
             pos = Origin - Difference;
             pos.y = Mathf.Clamp(pos.y, minY, maxY);
             pos.x = Mathf.Clamp(pos.x, minX, maxX);
-            Camera.main.transform.position = pos;
+            camera.transform.position = pos;
         }
 
     }

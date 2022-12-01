@@ -47,7 +47,7 @@ public class TestScript : MonoBehaviour
 
     public void UpdateLog()
     {
-        uint id = uint.Parse(this.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
+        uint id = uint.Parse(this.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text);
         List<Exchange> log = ModelHandler.GetLogs(id);
         int j = 9;
         if (log.Count < 9)
