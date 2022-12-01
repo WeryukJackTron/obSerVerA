@@ -643,6 +643,7 @@ GameObject:
   - component: {fileID: 1897939411}
   - component: {fileID: 1897939413}
   - component: {fileID: 1897939412}
+  - component: {fileID: 1897939414}
   m_Layer: 5
   m_Name: Tip
   m_TagString: Untagged
@@ -690,7 +691,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Open a farm's log to see where it sent/received herd.
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 648fd0738c8534f4b97f3b9eead139f1, type: 2}
   m_sharedMaterial: {fileID: 8922198027382970292, guid: 648fd0738c8534f4b97f3b9eead139f1, type: 2}
@@ -767,6 +768,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1897939410}
   m_CullTransparentMesh: 1
+--- !u!114 &1897939414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1897939410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e757c356ef72d24990cf0d9f2ac745e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Text: {fileID: 1897939412}
 --- !u!1 &1990374332
 GameObject:
   m_ObjectHideFlags: 0
