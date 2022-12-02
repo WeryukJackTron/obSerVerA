@@ -29,7 +29,7 @@ public class LogScript : MonoBehaviour
         {
             if (!transform.gameObject.activeSelf)
                 break;
-            transform.GetChild(1).GetComponentInChildren<TextMeshProUGUI>().text = "";
+            transform.GetChild(0).GetComponentInChildren<TextMeshProUGUI>().text = "";
         }
 
         //For some reason doesn't work Unity complains that Child is out of bounds when use GetChild(1)
