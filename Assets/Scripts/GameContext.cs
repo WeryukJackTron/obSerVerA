@@ -49,6 +49,9 @@ public static class GameContext
 
     public static FarmInfo[] sFarmsInfo = new FarmInfo[sNumberOfFarms];
 
+    public static int maxVets = 15;
+    public static int busyVets = 0;
+
     public static void Init()
     {
         //if (SceneManager.GetActiveScene().name != "Map" && SceneManager.GetActiveScene().name != "MapWithLoading" && SceneManager.GetActiveScene().name != "RealMap")//Check if scene is the one containing game

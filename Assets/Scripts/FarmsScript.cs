@@ -49,6 +49,7 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                 this.transform.parent.GetChild(1).gameObject.SetActive(false);
                 this.transform.parent.GetChild(3).gameObject.SetActive(false);
                 this.transform.parent.GetComponent<SpriteRenderer>().sprite = FarmInitScript.Infected;
+                FarmTracker.InspectDay[int.Parse(idfarm.GetComponent<TextMeshProUGUI>().text) - 1] = (int)GameContext.sCurrentDay - 1;
                 ModelHandler.sInfectedVisibleFarms.Add((ushort)int.Parse(idfarm.GetComponent<TextMeshProUGUI>().text));
                 //infoScript.PrintInfo("Farm " + transform.parent.gameObject.name + " is infected."); //Added by Petter
                 infoScript.PrintInfected("- Farm " + transform.parent.gameObject.name + " is infected.");
@@ -64,6 +65,7 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             else if (this.transform.parent.GetChild(2).gameObject.activeSelf)
             {
                 this.transform.parent.GetChild(2).gameObject.SetActive(false);
+                FarmTracker.InspectDay[int.Parse(idfarm.GetComponent<TextMeshProUGUI>().text) - 1] = (int)GameContext.sCurrentDay - 1;
                 //infoScript.PrintInfo("Farm " + transform.parent.gameObject.name + " is clear."); //Added by Petter
                 infoScript.PrintClean("- Farm " + transform.parent.gameObject.name + " is not infected.");
                 GameObject myEventSystem = GameObject.Find("EventSystem");
@@ -118,6 +120,7 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void quarantine(int farmID)
     {
+        FarmTracker.QuarantSince[farmID - 1] = (int)GameContext.sCurrentDay;
         GameObject aux = Instantiate(GameContext.Zone);
         Transform transform = null;
         foreach (GameObject gameObject in SideBarScript.Farms)

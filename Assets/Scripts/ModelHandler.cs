@@ -337,6 +337,7 @@ public static class ModelHandler
             {
                 sInfectedFarms.Add(farm.ID);
                 UnityEngine.Debug.Log(farm.ID);
+                FarmTracker.DayInfected[farm.ID - 1] = (int)GameContext.sCurrentDay;
                 //SpreadToFarm(farm.ID);
             }
             else if (farm.I == 0 && sInfectedFarms.Contains(farm.ID))

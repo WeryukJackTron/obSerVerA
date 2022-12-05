@@ -23,7 +23,7 @@ public class nextDayButton : MonoBehaviour
             SceneManager.LoadScene("End");
         // Call function to advance the model by one day
         ModelHandler.Run();
-
+        GameContext.busyVets = 0;
         for(int i = 0; i < farmid.Count; i++)
             FarmsScript.instance.quarantine(farmid[i]);
 
