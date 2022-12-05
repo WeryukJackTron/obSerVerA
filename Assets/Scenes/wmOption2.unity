@@ -692,8 +692,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 465772f8ce283b94880dafa17a3373ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FarmPrefab: {fileID: 985722756996650807, guid: b2c4ece3e8c0b5648b00386c5d560834, type: 3}
-  Target: {fileID: 1144882385}
+  FarmPrefab: {fileID: 8303553309707304398, guid: 8a436c1974eca91488e50e5f0788c96d, type: 3}
+  Target: {fileID: 880473487}
 --- !u!1 &122592612
 GameObject:
   m_ObjectHideFlags: 0
