@@ -83,14 +83,14 @@ public class worldMapPop : MonoBehaviour
 
     void genCoordList()
     {
-        string query = "SELECT x, y FROM ldata;";
-        ExecuteQuery(query, true, (ref IDataReader reader) =>
-        {
-            int x = (int)reader.GetDouble(0);
-            int y = (int)reader.GetDouble(1);
-
-            coordsList.Add(new Coordinate(x, y));
-        });
+        //string query = "SELECT x, y FROM ldata;";
+        //ExecuteQuery(query, true, (ref IDataReader reader) =>
+        //{
+        //    int x = (int)reader.GetDouble(0);
+        //    int y = (int)reader.GetDouble(1);
+        //
+        //    coordsList.Add(new Coordinate(x, y));
+        //});
 
         //List<string> temp = new List<string>();
         //var path = string.Format("{0}/Scripts/worldMapScripts/coordinates.txt", Application.dataPath);
@@ -112,26 +112,6 @@ public class worldMapPop : MonoBehaviour
         //    coordsList.Add(coordinate);
         //}
 
-    }
-
-    private static void ExecuteQuery(string query, bool selection = false, ActionRef<IDataReader> action = null)
-    {
-        string connection = string.Format("URI=file:{0}/{1}", Application.dataPath, "model.sqlite");
-        IDbConnection dbcon = new SqliteConnection(connection);
-        dbcon.Open();
-        using (var cmd = dbcon.CreateCommand())
-        {
-            cmd.CommandText = query;
-            if (!selection)
-                cmd.ExecuteNonQuery();
-            else
-            {
-                var reader = cmd.ExecuteReader();
-                while (reader.Read())
-                    action(ref reader);
-            }
-        }
-        dbcon.Close();
     }
 
 }

@@ -687,13 +687,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 109594600}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ace0a441edf9d9a4c97091e4d916b3af, type: 3}
+  m_Script: {fileID: 11500000, guid: 465772f8ce283b94880dafa17a3373ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  farmPrefab: {fileID: 9075842352244451922, guid: 8a436c1974eca91488e50e5f0788c96d, type: 3}
-  parent: {fileID: 1144882384}
+  FarmPrefab: {fileID: 985722756996650807, guid: b2c4ece3e8c0b5648b00386c5d560834, type: 3}
+  Target: {fileID: 1144882385}
 --- !u!1 &122592612
 GameObject:
   m_ObjectHideFlags: 0
@@ -3454,7 +3454,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 880473487}
-  - component: {fileID: 880473488}
   m_Layer: 5
   m_Name: Farms
   m_TagString: Untagged
@@ -3482,20 +3481,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &880473488
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 880473486}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 465772f8ce283b94880dafa17a3373ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  FarmPrefab: {fileID: 8303553309707304398, guid: 8a436c1974eca91488e50e5f0788c96d, type: 3}
-  Target: {fileID: 880473487}
 --- !u!1 &896841700
 GameObject:
   m_ObjectHideFlags: 0

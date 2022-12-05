@@ -29,35 +29,11 @@ public class FarmInitScript : MonoBehaviour
             Infected = Resources.Load<Sprite>("Barn_Infected");
 
         FarmProperty prop = sProps[sNextIndex];
-        SideBarScript.Farms[sNextIndex] = gameObject;
+        //SideBarScript.Farms[sNextIndex] = gameObject;
         gameObject.name = "" + prop.ID;
-        float x = prop.x / 25000.0f * (1920.0f - 250.0f) - 960.0f;
-        float y = prop.y / 25000.0f * 1000.0f - 540.0f;
-        x = Mathf.Max(x, -937.0f);//, 706.0f);
-        y = Mathf.Max(y, -470.0f);//, 500.0f);
-        
-        transform.localPosition = new Vector3(x, y, 0);
+
+        transform.localPosition = new Vector3(prop.x, prop.y, 0);
         sNextIndex++;
-
-        FarmInfo info = GameContext.sFarmsInfo[prop.ID - 1];
-        if (info.Exclamation)
-            transform.GetChild(1).gameObject.SetActive(true);
-
-        if (info.Infected)
-            transform.GetComponent<SpriteRenderer>().sprite = Infected;
-
-        if (info.Vet)
-            transform.GetChild(4).gameObject.SetActive(true);
-
-        if (info.Zone)
-        {
-            GameObject aux = Instantiate(GameContext.Zone);
-            aux.transform.parent = this.transform;
-            aux.transform.SetAsLastSibling();
-            aux.transform.localPosition = new Vector3(0, 0, 0);
-            aux.transform.localScale = new Vector3(.4f, .4f, 1f);
-            StartCoroutine(delayCheckZone(prop.ID));
-        }
     }
 
     IEnumerator delayCheckZone(int farmID)

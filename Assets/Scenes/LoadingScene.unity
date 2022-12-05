@@ -183,6 +183,8 @@ MonoBehaviour:
   AngularVelocity: 360
   Min: 0.05
   Max: 0.9
+  Iterations: 5
+  MinFarmDistance: 2.5
 --- !u!1 &192381638
 GameObject:
   m_ObjectHideFlags: 0
