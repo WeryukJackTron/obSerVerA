@@ -114,7 +114,7 @@ public static class ModelHandler
     private static List<ushort> sQuarantineFarms = new List<ushort>();
 
     /// <summary>A list containing the IDs of all farms that are infected</summary>
-    private static List<ushort> sInfectedFarms = new List<ushort>();
+    public static List<ushort> sInfectedFarms = new List<ushort>();
 
     private static volatile bool sModelRunning = false;
     private static ReaderWriterLock sLock = new ReaderWriterLock();

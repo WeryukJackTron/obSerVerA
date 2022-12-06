@@ -138,7 +138,7 @@ public class FarmsScript : MonoBehaviour
         aux.transform.localScale = new Vector3(40f, 40f, 1f);
         GameContext.sFarmsInfo[farmID - 1].Zone = true;
 
-        float radius = 22.23117306f;//I found it using gizmos :D
+        float radius = 11f;//I found it using gizmos :D
         Vector2 pos = new Vector2(-100000.0f, -100000.0f);
         foreach(Transform trans in GameContext.Farms)
         {

@@ -16,7 +16,15 @@ public class SideBarScript : MonoBehaviour
     void Start()
     {
         instance = this;
+        StartCoroutine(firstFarm());
     }
+
+    public IEnumerator firstFarm()
+    {
+        yield return new WaitForSeconds(1.0f);
+        int exclamation = Random.RandomRange(0, ModelHandler.sInfectedFarms.Count);
+        Farms[ModelHandler.sInfectedFarms[exclamation] - 1].transform.GetChild(1).gameObject.SetActive(true);
+    } 
 
     // Update is called once per frame
     void Update()
