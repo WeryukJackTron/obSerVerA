@@ -8,10 +8,13 @@ public class LogScript : MonoBehaviour
     public List<TextMeshProUGUI> checkbox;
 
     public static LogScript instance;
+
+    InfoScript infoScript; // Added by Petter
     // Start is called before the first frame update
     void Start()
     {
         instance = this;
+        infoScript = GameObject.FindGameObjectWithTag("Info").GetComponent<InfoScript>(); // Added by Petter
     }
 
     // Update is called once per frame
@@ -26,7 +29,7 @@ public class LogScript : MonoBehaviour
         {
             if (!transform.gameObject.activeSelf)
                 break;
-            transform.GetChild(1).GetComponentInChildren<TextMeshProUGUI>().text = "";
+            transform.GetChild(0).GetComponentInChildren<TextMeshProUGUI>().text = "";
         }
 
         //For some reason doesn't work Unity complains that Child is out of bounds when use GetChild(1)
@@ -42,22 +45,29 @@ public class LogScript : MonoBehaviour
     {
         for(int i = 0; i < checkbox.Count; i++)
         {
-            if(checkbox[i].text != "" && checkboxes[i] != 0)
+            if (GameContext.busyVets < GameContext.maxVets)
             {
-                foreach(GameObject gameObject in SideBarScript.Farms)
+                if (checkbox[i].text != "" && checkboxes[i] != 0)
                 {
-                    if (int.Parse(gameObject.name) != checkboxes[i])
-                        continue;
-                    Transform transform = gameObject.transform;
-                    if (transform.GetComponent<SpriteRenderer>().sprite != FarmInitScript.Infected)
+                    foreach (GameObject gameObject in SideBarScript.Farms)
                     {
-                        transform.GetChild(4).gameObject.SetActive(true);
+                        if (int.Parse(gameObject.name) != checkboxes[i])
+                            continue;
+                        Transform transform = gameObject.transform;
+                        if (transform.GetComponent<SpriteRenderer>().sprite != FarmInitScript.Infected && !ModelHandler.sUnderInvestigationFarms.Contains((ushort)int.Parse(gameObject.name)))
+                        {
+                            GameContext.busyVets++;
+                            Debug.Log(GameContext.busyVets + " Vets");
+                            transform.GetChild(4).gameObject.SetActive(true);
+                            infoScript.PrintVets("- A vet has been sent to " + gameObject.name + "."); // Added by Petter
+                            ModelHandler.sUnderInvestigationFarms.Add((ushort)int.Parse(transform.gameObject.name));
+                        }
+                        break;
                     }
-                    break;
+                    GameContext.sFarmsInfo[checkboxes[i] - 1].Vet = true;
+                    //if (SideBarScript.instance.farms[checkboxes[i] - 1].transform.GetComponent<SpriteRenderer>().sprite != FarmsScript.Infected)
+                    //    SideBarScript.instance.farms[checkboxes[i] - 1].transform.GetChild(4).gameObject.SetActive(true);
                 }
-                GameContext.sFarmsInfo[checkboxes[i] - 1].Vet = true;
-                //if (SideBarScript.instance.farms[checkboxes[i] - 1].transform.GetComponent<SpriteRenderer>().sprite != FarmsScript.Infected)
-                //    SideBarScript.instance.farms[checkboxes[i] - 1].transform.GetChild(4).gameObject.SetActive(true);
             }
         }
         resetCheckbox();

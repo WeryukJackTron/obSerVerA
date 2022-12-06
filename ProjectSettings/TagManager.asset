@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Info
   layers:
   - Default
   - TransparentFX
@@ -46,4 +47,7 @@ TagManager:
     locked: 0
   - name: farms
     uniqueID: 2090625291
+    locked: 0
+  - name: infopanel
+    uniqueID: 1626454471
     locked: 0

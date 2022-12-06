@@ -12,6 +12,8 @@ public class TestScript : MonoBehaviour
     public Grid paco;*/
     public GameObject grid_log;
     public GameObject confirm, reset;
+    public Sprite InfectedFarmLog, FarmLog;
+    public GameObject progressbar;
     public static TestScript instance;
     // Start is called before the first frame update
     void Start()
@@ -65,8 +67,10 @@ public class TestScript : MonoBehaviour
         {
             grid_log.transform.GetChild(i).gameObject.SetActive(true);
             Exchange exchange = log[i];
-            string line = string.Format("Farm: {0} send to farm: {1} [{2} days ago]", exchange.From, exchange.To, GameContext.sCurrentDay - exchange.Day);
+            string line = string.Format("{0} days ago", GameContext.sCurrentDay - exchange.Day);
             grid_log.transform.GetChild(i).GetComponent<TextMeshProUGUI>().text = line;
+            grid_log.transform.GetChild(i).GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>().text = exchange.From.ToString();
+            grid_log.transform.GetChild(i).GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text = exchange.To.ToString();
 
             if (id != exchange.From)
             {
@@ -89,7 +93,7 @@ public class TestScript : MonoBehaviour
             if (!transform.gameObject.activeSelf)
                 break;
 
-            transform.GetChild(1).gameObject.SetActive(!transform.GetChild(1).gameObject.activeSelf);
+            transform.GetChild(0).gameObject.SetActive(!transform.GetChild(0).gameObject.activeSelf);
         }
 
         //For some reason doesn't work Unity complains that Child is out of bounds when use GetChild(1)
@@ -98,5 +102,33 @@ public class TestScript : MonoBehaviour
         //{
         //    grid_log.transform.GetChild(i).GetChild(1).gameObject.SetActive(!grid_log.transform.GetChild(i).GetChild(1).gameObject.activeSelf);
         //}
+    }
+
+    public void checkFarm()
+    {
+        ushort farmid = (ushort)int.Parse(gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
+        if (ModelHandler.sInfectedVisibleFarms.Contains(farmid))
+        {
+            gameObject.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = InfectedFarmLog;
+        }
+        else
+        {
+            gameObject.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = FarmLog;
+        }
+        if (ModelHandler.sUnderInvestigationFarms.Contains(farmid))
+        {
+            progressbar.SetActive(true);
+        }
+        else
+        {
+            progressbar.SetActive(false);
+        }
+    }
+
+    public void changeFarmLog(int i)
+    {
+        this.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = LogScript.checkboxes[i].ToString();
+        UpdateLog();
+        checkFarm();
     }
 }
