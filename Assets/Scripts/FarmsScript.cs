@@ -135,7 +135,7 @@ public class FarmsScript : MonoBehaviour
         aux.transform.parent = transform;
         aux.transform.SetAsLastSibling();
         aux.transform.localPosition = new Vector3(0, 0, 0);
-        aux.transform.localScale = new Vector3(.4f, .4f, 1f);
+        aux.transform.localScale = new Vector3(40f, 40f, 1f);
         GameContext.sFarmsInfo[farmID - 1].Zone = true;
 
         float radius = 22.23117306f;//I found it using gizmos :D
