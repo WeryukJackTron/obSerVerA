@@ -55,7 +55,7 @@ public static class GameContext
         //    return;
 
         Map = GameObject.Find("Map");
-        Farms = GameObject.Find("Farms").transform;
+        Farms = GameObject.Find("FarmParent").transform;
         Log = GameObject.Find("Canvas").transform.GetChild(1).gameObject;//Lol unity (from tranform to child and then gameobject :P)
         Zone = Resources.Load<GameObject>("Zone");
 

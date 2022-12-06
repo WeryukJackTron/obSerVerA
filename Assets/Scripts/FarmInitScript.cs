@@ -29,7 +29,7 @@ public class FarmInitScript : MonoBehaviour
             Infected = Resources.Load<Sprite>("Barn_Infected");
 
         FarmProperty prop = sProps[sNextIndex];
-        //SideBarScript.Farms[sNextIndex] = gameObject;
+        SideBarScript.Farms[sNextIndex] = gameObject;
         gameObject.name = "" + prop.ID;
 
         transform.localPosition = new Vector3(prop.x, prop.y, 0);

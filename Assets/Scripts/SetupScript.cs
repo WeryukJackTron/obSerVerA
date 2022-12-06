@@ -107,12 +107,12 @@ public class SetupScript : MonoBehaviour
                     if (distance <= squareDistance)
                     {
                         Vector2 dir = (pos0 - pos1).normalized;
-                        pos0 += dir * MinFarmDistance;
+                        pos0 = pos1 + dir * MinFarmDistance;
                         if (pos0.x > -55.0f && pos0.x < 55.0f && pos0.y > -55.0f && pos0.y < 55.0f)
                             FarmInitScript.sProps[i] = new FarmProperty(FarmInitScript.sProps[i].ID, pos0.x, pos0.y);
                         else
                         {
-                            pos1 -= dir * MinFarmDistance;
+                            pos1 = pos0 - dir * MinFarmDistance;
                             FarmInitScript.sProps[i] = new FarmProperty(FarmInitScript.sProps[j].ID, pos1.x, pos1.y);
                         }
                     }
@@ -121,6 +121,7 @@ public class SetupScript : MonoBehaviour
             }
         }
 
+        SideBarScript.Farms = new GameObject[GameContext.sNumberOfFarms];
         SceneManager.LoadScene("wmOption2");
     }
 

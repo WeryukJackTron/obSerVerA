@@ -34,6 +34,7 @@ public class SideBarScript : MonoBehaviour
     bool showing = false;
     public void ShowHideFarmIDs()
     {
+        Debug.Log("Called");
         if(farmids.transform.GetChild(0).GetComponent<Image>().sprite == hide)
         {
             /*farmids.transform.GetComponent<SpriteRenderer>().color = Color.black;
