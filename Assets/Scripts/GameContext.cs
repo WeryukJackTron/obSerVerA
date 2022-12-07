@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Numerics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -47,6 +49,9 @@ public static class GameContext
     /// <summary> The gamma value that the model will use</summary>
     public static float sGamma = 0.077f;
 
+    public static string sDataPath = null;
+
+
     public static FarmInfo[] sFarmsInfo = new FarmInfo[sNumberOfFarms];
 
     public static int maxVets = 15;
@@ -54,16 +59,19 @@ public static class GameContext
 
     public static void Init()
     {
-        //if (SceneManager.GetActiveScene().name != "Map" && SceneManager.GetActiveScene().name != "MapWithLoading" && SceneManager.GetActiveScene().name != "RealMap")//Check if scene is the one containing game
-        //    return;
-
         Map = GameObject.Find("Map");
         Farms = GameObject.Find("FarmParent").transform;
         Log = GameObject.Find("Canvas").transform.GetChild(2).gameObject;//Lol unity (from tranform to child and then gameobject :P)
         Zone = Resources.Load<GameObject>("Zone");
-
-        //sCurrentDay = 1;
-        //ModelHandler.Init(7);
     }
+
+    public static void LogToFile(string line)
+    {
+        string filepath = sDataPath + "/script.log";
+        if (!File.Exists(filepath))
+            File.CreateText(filepath);
+        File.AppendAllLines(filepath, new []{ line });
+    }
+
 }
 
