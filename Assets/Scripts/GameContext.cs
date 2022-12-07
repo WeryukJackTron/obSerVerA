@@ -56,6 +56,8 @@ public static class GameContext
 
     public static int maxVets = 15;
     public static int busyVets = 0;
+    public static int sVetsSend;
+    public static int sZonePlaced;
 
     public static void Init()
     {
@@ -63,6 +65,9 @@ public static class GameContext
         Farms = GameObject.Find("FarmParent").transform;
         Log = GameObject.Find("Canvas").transform.GetChild(2).gameObject;//Lol unity (from tranform to child and then gameobject :P)
         Zone = Resources.Load<GameObject>("Zone");
+
+        sVetsSend = 0;
+        sZonePlaced = 0;
     }
 
     public static void LogToFile(string line)

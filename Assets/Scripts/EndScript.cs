@@ -9,9 +9,14 @@ public class EndScript : MonoBehaviour
     public TextMeshProUGUI Title;
     public TextMeshProUGUI Subtitle;
 
+    public TextMeshProUGUI VetsNum;
+    public TextMeshProUGUI ZonesNum;
+
     // Start is called before the first frame update
     void Start()
     {
+        VetsNum.SetText(GameContext.sVetsSend.ToString());
+        ZonesNum.SetText(GameContext.sZonePlaced.ToString());
         if (ModelHandler.HasWon())
         {
             Title.SetText("You Won");

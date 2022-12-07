@@ -117,10 +117,12 @@ public class FarmsScript : MonoBehaviour
         //infoScript.PrintInfo("A vet has been sent to " + farm.name + "."); //Added by Petter
         infoScript.PrintVets("- A vet has been sent to farm " + farm.name + ".");
         GameContext.sFarmsInfo[index].Vet = true;
+        GameContext.sVetsSend++;
     }
 
     public void quarantine(int farmID)
     {
+        GameContext.sZonePlaced++;
         FarmTracker.QuarantSince[farmID - 1] = (int)GameContext.sCurrentDay;
         GameObject aux = Instantiate(GameContext.Zone);
         Transform transform = null;

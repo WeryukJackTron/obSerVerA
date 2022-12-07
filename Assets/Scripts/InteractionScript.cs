@@ -41,6 +41,7 @@ public class InteractionScript : MonoBehaviour
                     continue;
 
                 gameObject.transform.GetChild(4).gameObject.SetActive(true);
+                GameContext.sVetsSend++;
                 gameObject.transform.GetChild(4).GetComponent<SpriteRenderer>().color = Color.green;
 
                 GameContext.sFarmsInfo[idfarm - 1].Vet = true;
