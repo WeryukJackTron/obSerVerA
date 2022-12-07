@@ -23,7 +23,7 @@ public class SideBarScript : MonoBehaviour
     public IEnumerator firstFarm()
     {
         yield return new WaitForSeconds(1.0f);
-        int exclamation = Random.Range(0, ModelHandler.sInfectedFarms.Count);
+        int exclamation = Random.Range(1, ModelHandler.sInfectedFarms.Count);
         Farms[ModelHandler.sInfectedFarms[exclamation] - 1].transform.GetChild(1).gameObject.SetActive(true);
     } 
 
