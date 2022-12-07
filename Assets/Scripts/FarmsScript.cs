@@ -133,7 +133,7 @@ public class FarmsScript : MonoBehaviour
             }
         }
         Debug.Log(farmID + " FarmID");
-        if (ModelHandler.IsFarmInfected((ushort)farmID))
+        if (ModelHandler.IsFarmInfected((ushort)farmID) && !ModelHandler.sInfectedVisibleFarms.Contains((ushort)farmID))
         {
             SideBarScript.Farms[farmID-1].GetComponent<SpriteRenderer>().sprite = FarmInitScript.Infected;
             FarmTracker.InspectDay[farmID - 1] = (int)GameContext.sCurrentDay - 1;

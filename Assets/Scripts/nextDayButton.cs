@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -7,11 +8,12 @@ using UnityEngine.UI;
 public class nextDayButton : MonoBehaviour
 {
     public static List<int> farmid = new List<int>();
+    public TextMeshProUGUI dayUI;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        dayUI.text = GameContext.sCurrentDay.ToString();
     }
 
     public void onClick()
@@ -21,7 +23,7 @@ public class nextDayButton : MonoBehaviour
         Debug.Log("Day " + dayNum);
         if (dayNum == 30)
             SceneManager.LoadScene("End");
-        
+        dayUI.text = (dayNum + 1).ToString();
         // Call function to advance the model by one day
         ModelHandler.Run();
         if (ModelHandler.HasLost())

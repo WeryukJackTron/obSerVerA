@@ -88,6 +88,8 @@ public class TestScript : MonoBehaviour
     {
         confirm.SetActive(!confirm.activeSelf);
         reset.SetActive(!reset.activeSelf);
+        if(!ModelHandler.sInfectedVisibleFarms.Contains((ushort)int.Parse(LogScript.instance.farmidLog.text)))
+            LogScript.instance.checkboxSelf.SetActive(!LogScript.instance.checkboxSelf.activeSelf);
 
         foreach(Transform transform in grid_log.transform)
         {

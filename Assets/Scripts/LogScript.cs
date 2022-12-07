@@ -6,6 +6,8 @@ using UnityEngine;
 public class LogScript : MonoBehaviour
 {
     public List<TextMeshProUGUI> checkbox;
+    public GameObject checkboxSelf;
+    public TextMeshProUGUI farmidLog;
 
     public static LogScript instance;
 
@@ -31,6 +33,7 @@ public class LogScript : MonoBehaviour
                 break;
             transform.GetChild(0).GetComponentInChildren<TextMeshProUGUI>().text = "";
         }
+        checkboxSelf.transform.GetComponentInChildren<TextMeshProUGUI>().text = "";
 
         //For some reason doesn't work Unity complains that Child is out of bounds when use GetChild(1)
         // Just like ShowHideCheckBoxes in TestScript
@@ -68,6 +71,17 @@ public class LogScript : MonoBehaviour
                     //if (SideBarScript.instance.farms[checkboxes[i] - 1].transform.GetComponent<SpriteRenderer>().sprite != FarmsScript.Infected)
                     //    SideBarScript.instance.farms[checkboxes[i] - 1].transform.GetChild(4).gameObject.SetActive(true);
                 }
+            }
+        }
+        if (GameContext.busyVets < GameContext.maxVets)
+        {
+            if (!ModelHandler.sInfectedVisibleFarms.Contains((ushort)int.Parse(farmidLog.text)) && !ModelHandler.sUnderInvestigationFarms.Contains((ushort)int.Parse(farmidLog.text)))
+            {
+                GameContext.busyVets++;
+                Debug.Log(GameContext.busyVets + " Vets");
+                SideBarScript.Farms[int.Parse(farmidLog.text) - 1].transform.GetChild(4).gameObject.SetActive(true);
+                infoScript.PrintVets("- A vet has been sent to " + farmidLog.text + ".");
+                ModelHandler.sUnderInvestigationFarms.Add((ushort)int.Parse(farmidLog.text));
             }
         }
         resetCheckbox();
