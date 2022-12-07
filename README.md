@@ -1,4 +1,4 @@
-![SVARM](Resources/Branding/Svarm.png)
+![SVARM](Resources/Branding/Logo.png)
 <p align="center">
     The Sherlock of Outbreak Simulator Games
 </p>
