@@ -56,6 +56,7 @@ public class InteractionScript : MonoBehaviour
             GameContext.Log.GetComponent<TestScript>().UpdateLog();
             GameContext.Log.GetComponent<TestScript>().checkFarm();
             GameContext.Map.SetActive(false);
+            SideBarScript.Farms[idfarm - 1].transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
         }
         idfarm = interaction_type = 0;
     }

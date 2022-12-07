@@ -5,24 +5,28 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler
+public class FarmsScript : MonoBehaviour
 {
     public GameObject idfarm;
+    public SpriteRenderer highlight;
     public float Radius = 22.23117306f;
 
     public static FarmsScript instance;
 
     InfoScript infoScript; //Added by Petter
 
-    bool options = false;
-    public void OnPointerEnter(PointerEventData eventData)
+    bool options = false, persistent = false;
+    public void OnMouseOver()
     {
+        highlight.enabled = true;
         idfarm.SetActive(true);
         options = true;
     }
 
-    public void OnPointerExit(PointerEventData eventData)
+    public void OnMouseExit()
     {
+        if(!persistent)
+            highlight.enabled = false;
         idfarm.SetActive(false);
         options = false;
     }
@@ -32,8 +36,13 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     void Start()
     {
         instance = this;
-        idfarm.GetComponent<TextMeshProUGUI>().text = this.gameObject.transform.parent.name;
+        StartCoroutine(delayStart());
+    }
 
+    public IEnumerator delayStart()
+    {
+        yield return new WaitForSeconds(0.5f);
+        idfarm.GetComponent<TextMeshPro>().text = this.gameObject.transform.parent.name;
         infoScript = GameObject.FindGameObjectWithTag("Info").GetComponent<InfoScript>(); //Added by Petter
     }
 
@@ -42,56 +51,48 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         /*if(Input.GetKeyDown(KeyCode.P))
             GameContext.Map.transform.GetChild(1).GetChild(3).GetChild(0).GetComponent<SelectScript>().deselectFarm();*/
-        if (options && Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
-            if(this.transform.parent.GetChild(1).gameObject.activeSelf || this.transform.parent.GetChild(3).gameObject.activeSelf)
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity);
+            if (hit.collider != null && options && hit.collider.transform.parent.gameObject.name == this.transform.parent.gameObject.name)
             {
-                this.transform.parent.GetChild(1).gameObject.SetActive(false);
-                this.transform.parent.GetChild(3).gameObject.SetActive(false);
-                this.transform.parent.GetComponent<SpriteRenderer>().sprite = FarmInitScript.Infected;
-                FarmTracker.InspectDay[int.Parse(idfarm.GetComponent<TextMeshProUGUI>().text) - 1] = (int)GameContext.sCurrentDay - 1;
-                ModelHandler.sInfectedVisibleFarms.Add((ushort)int.Parse(idfarm.GetComponent<TextMeshProUGUI>().text));
-                //infoScript.PrintInfo("Farm " + transform.parent.gameObject.name + " is infected."); //Added by Petter
-                infoScript.PrintInfected("- Farm " + transform.parent.gameObject.name + " is infected.");
-                GameObject myEventSystem = GameObject.Find("EventSystem");
-                myEventSystem.GetComponent<EventSystem>().SetSelectedGameObject(null);
-                StartCoroutine(DelayDeselectFarm());
+                if(InteractionScript.instance.interaction_type == 0)
+                    persistent = true;
+                InteractionScript.instance.setFarmId(int.Parse(this.transform.parent.name));
+                if (this.transform.parent.GetChild(1).gameObject.activeSelf || this.transform.parent.GetChild(3).gameObject.activeSelf)
+                {
+                    this.transform.parent.GetChild(1).gameObject.SetActive(false);
+                    this.transform.parent.GetChild(3).gameObject.SetActive(false);
+                    this.transform.parent.GetComponent<SpriteRenderer>().sprite = FarmInitScript.Infected;
+                    FarmTracker.InspectDay[int.Parse(idfarm.GetComponent<TextMeshPro>().text) - 1] = (int)GameContext.sCurrentDay - 1;
+                    ModelHandler.sInfectedVisibleFarms.Add((ushort)int.Parse(idfarm.GetComponent<TextMeshPro>().text));
+                    //infoScript.PrintInfo("Farm " + transform.parent.gameObject.name + " is infected."); //Added by Petter
+                    infoScript.PrintInfected("- Farm " + transform.parent.gameObject.name + " is infected.");
 
-                int index = int.Parse(transform.parent.gameObject.name) - 1;
-                GameContext.sFarmsInfo[index].Infected = true;
-                if (GameContext.sFarmsInfo[index].Exclamation)
-                    GameContext.sFarmsInfo[index].Exclamation = false;
+                    int index = int.Parse(transform.parent.gameObject.name) - 1;
+                    GameContext.sFarmsInfo[index].Infected = true;
+                    if (GameContext.sFarmsInfo[index].Exclamation)
+                        GameContext.sFarmsInfo[index].Exclamation = false;
+                }
+                else if (this.transform.parent.GetChild(2).gameObject.activeSelf)
+                {
+                    this.transform.parent.GetChild(2).gameObject.SetActive(false);
+                    FarmTracker.InspectDay[int.Parse(idfarm.GetComponent<TextMeshPro>().text) - 1] = (int)GameContext.sCurrentDay - 1;
+                    //infoScript.PrintInfo("Farm " + transform.parent.gameObject.name + " is clear."); //Added by Petter
+                    infoScript.PrintClean("- Farm " + transform.parent.gameObject.name + " is not infected.");
+                }
             }
-            else if (this.transform.parent.GetChild(2).gameObject.activeSelf)
+            else if (hit.collider == null)
             {
-                this.transform.parent.GetChild(2).gameObject.SetActive(false);
-                FarmTracker.InspectDay[int.Parse(idfarm.GetComponent<TextMeshProUGUI>().text) - 1] = (int)GameContext.sCurrentDay - 1;
-                //infoScript.PrintInfo("Farm " + transform.parent.gameObject.name + " is clear."); //Added by Petter
-                infoScript.PrintClean("- Farm " + transform.parent.gameObject.name + " is not infected.");
-                GameObject myEventSystem = GameObject.Find("EventSystem");
-                myEventSystem.GetComponent<EventSystem>().SetSelectedGameObject(null);
+                persistent = false;
+                highlight.enabled = false;
                 StartCoroutine(DelayDeselectFarm());
             }
-            else if (!zoned && SelectScript.selected)
+            else if(hit.collider.transform.parent.gameObject.name != this.transform.parent.gameObject.name)
             {
-                /*this.transform.parent.GetChild(4).gameObject.SetActive(true);
-                this.transform.parent.GetChild(4).GetComponent<SpriteRenderer>().color = Color.green;
-                zoned = true;
-                nextDayButton.farmid.Add(int.Parse(this.transform.parent.name));
-                GameObject myEventSystem = GameObject.Find("EventSystem");
-                myEventSystem.GetComponent<EventSystem>().SetSelectedGameObject(null);
-                StartCoroutine(DelayDeselectFarm());*/
-            }
-            else if(SelectScript.selectedLog)
-            {
-                /*GameContext.Log.SetActive(true);
-                GameContext.Log.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = this.transform.parent.name;
-                GameContext.Log.GetComponent<TestScript>().UpdateLog();
-                this.gameObject.transform.GetChild(0).gameObject.SetActive(false);
-                SelectScript.selectedLog = false;
-                GameContext.Map.transform.GetChild(1).GetChild(3).GetChild(0).GetComponent<SelectScript>().deselectFarm();
-                GameContext.Map.transform.GetChild(1).GetChild(0).GetChild(0).GetComponent<SelectScript>().deselectFarm();
-                GameContext.Map.SetActive(false);*/
+                persistent = false;
+                highlight.enabled = false;
             }
         }
     }
@@ -131,14 +132,21 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                 break;
             }
         }
-
+        Debug.Log(farmID + " FarmID");
+        if (ModelHandler.IsFarmInfected((ushort)farmID))
+        {
+            SideBarScript.Farms[farmID-1].GetComponent<SpriteRenderer>().sprite = FarmInitScript.Infected;
+            FarmTracker.InspectDay[farmID - 1] = (int)GameContext.sCurrentDay - 1;
+            ModelHandler.sInfectedVisibleFarms.Add((ushort)farmID);
+            infoScript.PrintInfected("- Farm " + SideBarScript.Farms[farmID - 1].gameObject.name + " is infected.");
+        }
         aux.transform.parent = transform;
         aux.transform.SetAsLastSibling();
         aux.transform.localPosition = new Vector3(0, 0, 0);
-        aux.transform.localScale = new Vector3(.4f, .4f, 1f);
+        aux.transform.localScale = new Vector3(40f, 40f, 1f);
         GameContext.sFarmsInfo[farmID - 1].Zone = true;
 
-        float radius = 22.23117306f;//I found it using gizmos :D
+        float radius = 10.9f;//I found it using gizmos :D
         Vector2 pos = new Vector2(-100000.0f, -100000.0f);
         foreach(Transform trans in GameContext.Farms)
         {
@@ -164,7 +172,8 @@ public class FarmsScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                     if (!ModelHandler.IsFarmQuarantine(id))
                     {
                         ModelHandler.QuarantineFarm(id);
-                        StartCoroutine(delayVetQuarantine(GameContext.Farms.GetChild(i).transform));
+                        if(!ModelHandler.sInfectedVisibleFarms.Contains(id))
+                            StartCoroutine(delayVetQuarantine(GameContext.Farms.GetChild(i).transform));
                     }
                 }
             }

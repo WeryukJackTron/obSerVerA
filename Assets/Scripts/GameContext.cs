@@ -49,6 +49,9 @@ public static class GameContext
 
     public static FarmInfo[] sFarmsInfo = new FarmInfo[sNumberOfFarms];
 
+    public static int maxVets = 15;
+    public static int busyVets = 0;
+
     public static void Init()
     {
         //if (SceneManager.GetActiveScene().name != "Map" && SceneManager.GetActiveScene().name != "MapWithLoading" && SceneManager.GetActiveScene().name != "RealMap")//Check if scene is the one containing game
@@ -56,7 +59,7 @@ public static class GameContext
 
         Map = GameObject.Find("Map");
         Farms = GameObject.Find("FarmParent").transform;
-        Log = GameObject.Find("Canvas").transform.GetChild(1).gameObject;//Lol unity (from tranform to child and then gameobject :P)
+        Log = GameObject.Find("Canvas").transform.GetChild(2).gameObject;//Lol unity (from tranform to child and then gameobject :P)
         Zone = Resources.Load<GameObject>("Zone");
 
         //sCurrentDay = 1;

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 public class TestScript : MonoBehaviour
 {
@@ -106,14 +107,14 @@ public class TestScript : MonoBehaviour
 
     public void checkFarm()
     {
-        ushort farmid = (ushort)int.Parse(gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
+        ushort farmid = (ushort)int.Parse(gameObject.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text);
         if (ModelHandler.sInfectedVisibleFarms.Contains(farmid))
         {
-            gameObject.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = InfectedFarmLog;
+            gameObject.transform.GetChild(0).GetComponent<Image>().sprite = InfectedFarmLog;
         }
         else
         {
-            gameObject.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = FarmLog;
+            gameObject.transform.GetChild(0).GetComponent<Image>().sprite = FarmLog;
         }
         if (ModelHandler.sUnderInvestigationFarms.Contains(farmid))
         {
@@ -127,7 +128,7 @@ public class TestScript : MonoBehaviour
 
     public void changeFarmLog(int i)
     {
-        this.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = LogScript.checkboxes[i].ToString();
+        this.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = LogScript.checkboxes[i].ToString();
         UpdateLog();
         checkFarm();
     }
