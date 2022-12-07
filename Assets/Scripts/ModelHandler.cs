@@ -349,7 +349,7 @@ public static class ModelHandler
 
         foreach (Exchange exchange in events)
         {
-            string query = string.Format("INSERT INTO events (event, time, node, dest, n, proportion, 'select', shift) VALUES(\"extTrans\", {0}, {1}, {2}, 0, {3}, 4, 0);", GameContext.sCurrentDay, exchange.From, exchange.To, exchange.Propotion);
+            string query = string.Format("INSERT INTO events (event, time, node, dest, n, proportion, 'select', shift) VALUES(\"extTrans\", {0}, {1}, {2}, 0, {3}, 4, 0);", GameContext.sCurrentDay, exchange.From, exchange.To, exchange.Propotion.ToString("G", new System.Globalization.CultureInfo("en-US")));
             ExecuteQuery(query);
         }
 
