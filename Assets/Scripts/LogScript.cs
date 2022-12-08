@@ -33,7 +33,8 @@ public class LogScript : MonoBehaviour
                 break;
             transform.GetChild(0).GetComponentInChildren<TextMeshProUGUI>().text = "";
         }
-        checkboxSelf.transform.GetComponentInChildren<TextMeshProUGUI>().text = "";
+        if(checkboxSelf.activeSelf)
+            checkboxSelf.transform.GetComponentInChildren<TextMeshProUGUI>().text = "";
 
         //For some reason doesn't work Unity complains that Child is out of bounds when use GetChild(1)
         // Just like ShowHideCheckBoxes in TestScript
