@@ -33,7 +33,7 @@ public class LogScript : MonoBehaviour
                 break;
             transform.GetChild(0).GetComponentInChildren<TextMeshProUGUI>().text = "";
         }
-        if(checkboxSelf.activeSelf)
+        if(checkboxSelf.activeSelf && checkboxSelf.transform.GetChild(0).gameObject.activeSelf)
             checkboxSelf.transform.GetComponentInChildren<TextMeshProUGUI>().text = "";
 
         //For some reason doesn't work Unity complains that Child is out of bounds when use GetChild(1)
