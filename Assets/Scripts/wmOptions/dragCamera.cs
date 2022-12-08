@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class dragCamera : MonoBehaviour
 {
+    public static dragCamera instance = null;
+
     private Vector3 Origin;
     private Vector3 Difference;
     private bool Drag = false;
@@ -16,6 +18,7 @@ public class dragCamera : MonoBehaviour
 
     Vector3 pos;
 
+    private void Start() { instance = this; }
 
     void LateUpdate()
     {
@@ -43,4 +46,13 @@ public class dragCamera : MonoBehaviour
 
     }
 
+    public void JumpTo(int farmID)
+    {
+        Transform trans = SideBarScript.Farms[farmID - 1].transform;
+        Vector3 position = trans.position;
+        position.x = Mathf.Clamp(position.x, minX, maxX);
+        position.y = Mathf.Clamp(position.y, minY, maxY);
+        position.z = -10.0f;
+        camera.transform.position = position;
+    }
 }

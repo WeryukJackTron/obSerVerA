@@ -130,7 +130,9 @@ public class TestScript : MonoBehaviour
 
     public void changeFarmLog(int i)
     {
-        this.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = LogScript.checkboxes[i].ToString();
+        int id = LogScript.checkboxes[i];
+        dragCamera.instance.JumpTo(id);
+        this.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = id.ToString();
         UpdateLog();
         checkFarm();
     }
