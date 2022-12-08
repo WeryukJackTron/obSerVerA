@@ -51,6 +51,7 @@ public static class GameContext
 
     public static string sDataPath = null;
 
+    public static List<ushort> sCalledSVA;
 
     public static FarmInfo[] sFarmsInfo = new FarmInfo[sNumberOfFarms];
 
@@ -68,6 +69,7 @@ public static class GameContext
 
         sVetsSend = 0;
         sZonePlaced = 0;
+        sCalledSVA = new List<ushort>();
     }
 
     public static void LogToFile(string line)

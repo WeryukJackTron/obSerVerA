@@ -29,6 +29,16 @@ public class nextDayButton : MonoBehaviour
         if (ModelHandler.HasLost())
             SceneManager.LoadScene("End");
 
+        List<ushort> calling = ModelHandler.GetWhoCalled();
+        if(calling.Count > 0)
+        {
+            foreach (ushort call in calling)
+            {
+                SideBarScript.Farms[call - 1].transform.GetChild(1).gameObject.SetActive(true);
+                GameContext.sCalledSVA.Add(call);
+            }
+        }
+
         GameContext.busyVets = 0;
         for(int i = 0; i < farmid.Count; i++)
             FarmsScript.instance.quarantine(farmid[i]);

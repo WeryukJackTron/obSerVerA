@@ -23,9 +23,12 @@ public class SideBarScript : MonoBehaviour
     public IEnumerator firstFarm()
     {
         yield return new WaitForSeconds(1.0f);
-        int exclamation = Random.Range(1, ModelHandler.sInfectedFarms.Count);
-        Farms[ModelHandler.sInfectedFarms[exclamation] - 1].transform.GetChild(1).gameObject.SetActive(true);
-    } 
+        List<ushort> infected = ModelHandler.GetInfected();
+        int exclamation = Random.Range(1, infected.Count);
+        ushort id = infected[exclamation];
+        Farms[id - 1].transform.GetChild(1).gameObject.SetActive(true);
+        GameContext.sCalledSVA.Add(id);
+    }
 
     // Update is called once per frame
     void Update()
