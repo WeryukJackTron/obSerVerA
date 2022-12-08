@@ -19,16 +19,18 @@ public class EndScript : MonoBehaviour
         ZonesNum.SetText(GameContext.sZonePlaced.ToString());
         if (ModelHandler.HasWon())
         {
-            Title.SetText("You Won");
-            Subtitle.SetText("Congratulations you manage to quarantine all infected farms");
+            Title.SetText("You  Won");
+            Title.color = new Color(0, 255, 0);
+            Subtitle.SetText("Congratulations  you  managed  to  quarantine  all  infected  farms");
         }
         else//You obviously lost
         {
-            Title.SetText("You Lost");
+            Title.SetText("You  Lost");
+            Title.color = new Color(255, 0, 0);
             if (GameContext.sCurrentDay >= 30)
-                Subtitle.SetText("Unfortunately you didn't manage to restrict the infection in time");
+                Subtitle.SetText("Unfortunately  you  didn't  manage  to  restrict  the  infection  in  time");
             else
-                Subtitle.SetText("The virus went out of control, half or more of the farms are infected");
+                Subtitle.SetText("The  virus  went  out  of  control,  half  or  more  of  the  farms  are  infected");
         }
     }
 }
