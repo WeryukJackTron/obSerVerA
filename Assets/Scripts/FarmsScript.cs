@@ -114,7 +114,7 @@ public class FarmsScript : MonoBehaviour
 
         int index = int.Parse(farm.name) - 1;
         UnityEngine.Debug.Log("Sending vet to: " + (index + 1));
-        //infoScript.PrintInfo("A vet has been sent to " + farm.name + "."); //Added by Petter
+        //infoScript.PrintInfo("A vet has been sent to farm " + farm.name + "."); //Added by Petter
         infoScript.PrintVets("- A vet has been sent to farm " + farm.name + ".");
         GameContext.sFarmsInfo[index].Vet = true;
         GameContext.sVetsSend++;
