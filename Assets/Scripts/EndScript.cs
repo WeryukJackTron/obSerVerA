@@ -33,4 +33,10 @@ public class EndScript : MonoBehaviour
                 Subtitle.SetText("The  virus  went  out  of  control,  half  or  more  of  the  farms  are  infected");
         }
     }
+
+    public void quitGame()
+    {
+        Debug.Log("Exited");
+        Application.Quit();
+    }
 }
