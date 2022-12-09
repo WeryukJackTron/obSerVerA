@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class InfoScript : MonoBehaviour
 {
+    public GameObject settings;
+
     public int maxMessages = 10;
 
     public GameObject QuarantinePanel;
@@ -44,6 +46,7 @@ public class InfoScript : MonoBehaviour
     private void Start()
     {
         instance = this;
+        settings.SetActive(false);
         //gameObject.SetActive(false);
     }
 

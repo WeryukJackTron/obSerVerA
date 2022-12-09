@@ -14,7 +14,7 @@ public class TestScript : MonoBehaviour
     public GameObject grid_log;
     public GameObject confirm, reset;
     public Sprite InfectedFarmLog, FarmLog;
-    public GameObject progressbar;
+    public GameObject progressbar, board;
     public static TestScript instance;
     // Start is called before the first frame update
     void Start()
@@ -117,6 +117,24 @@ public class TestScript : MonoBehaviour
         //}
     }
 
+    public void HideCheckBoxes()
+    {
+        confirm.SetActive(false);
+        confirm.GetComponent<Button>().interactable = false;
+        reset.SetActive(false);
+        reset.GetComponent<Button>().interactable = false;
+        if (!ModelHandler.sInfectedVisibleFarms.Contains((ushort)int.Parse(LogScript.instance.farmidLog.text)))
+            LogScript.instance.checkboxSelf.SetActive(false);
+
+        foreach (Transform transform in grid_log.transform)
+        {
+            if (!transform.gameObject.activeSelf)
+                break;
+
+            transform.GetChild(0).gameObject.SetActive(false);
+        }
+    }
+
     public void checkFarm()
     {
         ushort farmid = (ushort)int.Parse(gameObject.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text);
@@ -143,7 +161,11 @@ public class TestScript : MonoBehaviour
         int id = LogScript.checkboxes[i];
         dragCamera.instance.JumpTo(id);
         this.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = id.ToString();
+        LogScript.instance.resetCheckbox();
+        if (board.activeSelf)
+            board.SetActive(false);
         UpdateLog();
         checkFarm();
+        HideCheckBoxes();
     }
 }

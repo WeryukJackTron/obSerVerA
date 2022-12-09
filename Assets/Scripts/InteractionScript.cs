@@ -13,6 +13,7 @@ public class InteractionScript : MonoBehaviour
     public void Start()
     {
         instance = this;
+        this.gameObject.SetActive(false);
     }
 
     public void setFarmId(int id)
