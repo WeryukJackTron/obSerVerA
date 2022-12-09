@@ -9,8 +9,9 @@ using UnityEngine.UI;
 public class TestScript : MonoBehaviour
 {
 
-   /* public Tilemap pepe;
-    public Grid paco;*/
+    /* public Tilemap pepe;
+     public Grid paco;*/
+    public TextMeshProUGUI tutorialidfarm;
     public GameObject grid_log;
     public GameObject confirm, reset;
     public Sprite InfectedFarmLog, FarmLog;
@@ -70,8 +71,18 @@ public class TestScript : MonoBehaviour
             Exchange exchange = log[i];
             string line = string.Format("{0} days ago", GameContext.sCurrentDay - exchange.Day);
             grid_log.transform.GetChild(i).GetComponent<TextMeshProUGUI>().text = line;
-            grid_log.transform.GetChild(i).GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>().text = exchange.From.ToString();
-            grid_log.transform.GetChild(i).GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text = exchange.To.ToString();
+            if (exchange.From.ToString() == this.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text)
+            {
+                grid_log.transform.GetChild(i).GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>().text = exchange.From.ToString();
+                grid_log.transform.GetChild(i).GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text = exchange.To.ToString();
+                grid_log.transform.GetChild(i).GetChild(2).localEulerAngles = new Vector3(0, 0, 0);
+            }
+            else
+            {
+                grid_log.transform.GetChild(i).GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>().text = exchange.To.ToString();
+                grid_log.transform.GetChild(i).GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text = exchange.From.ToString();
+                grid_log.transform.GetChild(i).GetChild(2).localEulerAngles = new Vector3(0, 180, 0);
+            }
 
             if (id != exchange.From)
             {
@@ -126,6 +137,11 @@ public class TestScript : MonoBehaviour
         {
             progressbar.SetActive(false);
         }
+    }
+
+    public void tutorialID()
+    {
+        tutorialidfarm.text = this.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text;
     }
 
     public void changeFarmLog(int i)
