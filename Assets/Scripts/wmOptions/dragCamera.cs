@@ -50,7 +50,7 @@ public class dragCamera : MonoBehaviour
     {
         Transform trans = SideBarScript.Farms[farmID - 1].transform;
         Vector3 position = trans.position;
-        position.x = Mathf.Clamp(position.x, minX, maxX);
+        position.x = Mathf.Clamp(position.x + 8, minX, maxX);
         position.y = Mathf.Clamp(position.y, minY, maxY);
         position.z = -10.0f;
         camera.transform.position = position;
