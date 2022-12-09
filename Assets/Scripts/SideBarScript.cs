@@ -11,7 +11,7 @@ public class SideBarScript : MonoBehaviour
     public GameObject farmids;
     public Sprite hide, show;
     public static SideBarScript instance;
-    public TextMeshProUGUI totalFarmInfected;
+    public TextMeshProUGUI totalFarmInfected, vetsavailable;
 
     // Start is called before the first frame update
     void Start()
@@ -34,6 +34,7 @@ public class SideBarScript : MonoBehaviour
     void Update()
     {
         totalFarmInfected.text = ModelHandler.sInfectedVisibleFarms.Count + "/150";
+        vetsavailable.text = "Vets: " + (15 - GameContext.busyVets) + "/15";
         if (showing)
         {
             for (int i = 0; i < Farms.Length; i++)

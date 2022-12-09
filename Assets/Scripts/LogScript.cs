@@ -77,7 +77,7 @@ public class LogScript : MonoBehaviour
         }
         if (GameContext.busyVets < GameContext.maxVets)
         {
-            if (!ModelHandler.sInfectedVisibleFarms.Contains((ushort)int.Parse(farmidLog.text)) && !ModelHandler.sUnderInvestigationFarms.Contains((ushort)int.Parse(farmidLog.text)))
+            if (!ModelHandler.sInfectedVisibleFarms.Contains((ushort)int.Parse(farmidLog.text)) && !ModelHandler.sUnderInvestigationFarms.Contains((ushort)int.Parse(farmidLog.text)) && checkboxSelf.transform.GetChild(0).gameObject.activeSelf)
             {
                 GameContext.busyVets++;
                 Debug.Log(GameContext.busyVets + " Vets");
