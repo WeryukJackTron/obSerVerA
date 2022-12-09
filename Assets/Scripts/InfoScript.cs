@@ -184,6 +184,11 @@ public class InfoScript : MonoBehaviour
             DestroyImmediate(infoPanel.transform.GetChild(i).gameObject);
         }
     }
+
+    public void backtoMainmenu()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+    }
 }
 
 [System.Serializable]
