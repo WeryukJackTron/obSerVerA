@@ -24,7 +24,7 @@ public class minimapController : MonoBehaviour
     public void OnPostRender()
     {
         Vector3 minViewportPoint = minimap.WorldToViewportPoint(GetCameraFrustumPoint(new Vector3(0f, 0f)));
-        Vector3 maxViewportPoint = minimap.WorldToViewportPoint(GetCameraFrustumPoint(new Vector3(Screen.width, Screen.height)));
+        Vector3 maxViewportPoint = minimap.WorldToViewportPoint(GetCameraFrustumPoint(new Vector3(Screen.width - 480f, Screen.height)));
 
         float minX = minViewportPoint.x;
         float minY = minViewportPoint.y;
