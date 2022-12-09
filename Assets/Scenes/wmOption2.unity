@@ -16011,7 +16011,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 150
+  m_text: 21
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 648fd0738c8534f4b97f3b9eead139f1, type: 2}
   m_sharedMaterial: {fileID: 8922198027382970292, guid: 648fd0738c8534f4b97f3b9eead139f1, type: 2}
@@ -18040,18 +18040,6 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 8300000, guid: 61377e164409f7846a013d9fc61faf12, type: 3}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 714025358}
-        m_TargetAssemblyTypeName: TestScript, Assembly-CSharp
-        m_MethodName: tutorialID
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 

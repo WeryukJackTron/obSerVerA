@@ -11,7 +11,6 @@ public class TestScript : MonoBehaviour
 
     /* public Tilemap pepe;
      public Grid paco;*/
-    public TextMeshProUGUI tutorialidfarm;
     public GameObject grid_log;
     public GameObject confirm, reset;
     public Sprite InfectedFarmLog, FarmLog;
@@ -137,11 +136,6 @@ public class TestScript : MonoBehaviour
         {
             progressbar.SetActive(false);
         }
-    }
-
-    public void tutorialID()
-    {
-        tutorialidfarm.text = this.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text;
     }
 
     public void changeFarmLog(int i)
