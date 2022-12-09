@@ -111,13 +111,15 @@ public class Farm
 
 public static class ModelHandler
 {
-    /// <summary>A List containing the IDs of all farms that are under quarantine</summary>
-    private static List<ushort> sQuarantineFarms = new List<ushort>();
     public static List<ushort> sUnderInvestigationFarms = new List<ushort>();
     public static List<ushort> sInfectedVisibleFarms = new List<ushort>();
 
+    /// <summary>A List containing the IDs of all farms that are under quarantine</summary>
+    private static List<ushort> sQuarantineFarms = new List<ushort>();
+
     /// <summary>A list containing the IDs of all farms that are infected</summary>
     private static List<ushort> sInfectedFarms = new List<ushort>();
+    private static List<ushort> sRecoveredFarms = new List<ushort>();
 
     private static volatile bool sModelRunning = false;
     private static ReaderWriterLock sLock = new ReaderWriterLock();
@@ -169,6 +171,14 @@ public static class ModelHandler
         List<ushort> infected = new List<ushort>(sInfectedFarms);
         sLock.ReleaseReaderLock();
         return infected;
+    }
+
+    public static List<ushort> GetRecovered()
+    {
+        sLock.AcquireReaderLock(-1);
+        List<ushort> recovered = new List<ushort>(sRecoveredFarms);
+        sLock.ReleaseReaderLock();
+        return recovered;
     }
 
     public static List<ushort> GetWhoCalled()
@@ -408,10 +418,15 @@ public static class ModelHandler
                 sInfectedFarms.Add(farm.ID);
                 UnityEngine.Debug.Log(farm.ID);
                 FarmTracker.DayInfected[farm.ID - 1] = (int)GameContext.sCurrentDay;
+                if (sRecoveredFarms.Contains(farm.ID))
+                    sRecoveredFarms.Remove(farm.ID);
                 //SpreadToFarm(farm.ID);
             }
             else if (farm.I == 0 && sInfectedFarms.Contains(farm.ID))
+            {
                 sInfectedFarms.Remove(farm.ID);
+                sRecoveredFarms.Add(farm.ID);
+            }
         }
 
         sLoseFlag = ((float)sInfectedFarms.Count / GameContext.sNumberOfFarms) >= 0.5f;
