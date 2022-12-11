@@ -68,7 +68,7 @@ public class FarmsScript : MonoBehaviour
                     FarmTracker.InspectDay[int.Parse(idfarm.GetComponent<TextMeshPro>().text) - 1] = (int)GameContext.sCurrentDay - 1;
                     ModelHandler.sInfectedVisibleFarms.Add((ushort)int.Parse(idfarm.GetComponent<TextMeshPro>().text));
                     //infoScript.PrintInfo("Farm " + transform.parent.gameObject.name + " is infected."); //Added by Petter
-                    infoScript.PrintInfected("- Farm " + transform.parent.gameObject.name + " is infected.");
+                    //infoScript.PrintInfected("- Farm " + transform.parent.gameObject.name + " is infected.");
 
                     int index = int.Parse(transform.parent.gameObject.name) - 1;
                     GameContext.sFarmsInfo[index].Infected = true;
@@ -80,7 +80,7 @@ public class FarmsScript : MonoBehaviour
                     this.transform.parent.GetChild(2).gameObject.SetActive(false);
                     FarmTracker.InspectDay[int.Parse(idfarm.GetComponent<TextMeshPro>().text) - 1] = (int)GameContext.sCurrentDay - 1;
                     //infoScript.PrintInfo("Farm " + transform.parent.gameObject.name + " is clear."); //Added by Petter
-                    infoScript.PrintClean("- Farm " + transform.parent.gameObject.name + " is not infected.");
+                    //infoScript.PrintClean("- Farm " + transform.parent.gameObject.name + " is not infected.");
                 }
             }
             else if (hit.collider == null)
@@ -115,7 +115,8 @@ public class FarmsScript : MonoBehaviour
         int index = int.Parse(farm.name) - 1;
         UnityEngine.Debug.Log("Sending vet to: " + (index + 1));
         //infoScript.PrintInfo("A vet has been sent to farm " + farm.name + "."); //Added by Petter
-        infoScript.PrintVets("- A vet has been sent to farm " + farm.name + ".");
+        //infoScript.PrintVets("- A vet has been sent to farm " + farm.name + ".");
+        ModelHandler.sUnderInvestigationFarms.Add((ushort)int.Parse(farm.name));
         GameContext.sFarmsInfo[index].Vet = true;
         GameContext.sVetsSend++;
     }
@@ -140,7 +141,7 @@ public class FarmsScript : MonoBehaviour
             SideBarScript.Farms[farmID-1].GetComponent<SpriteRenderer>().sprite = FarmInitScript.Infected;
             FarmTracker.InspectDay[farmID - 1] = (int)GameContext.sCurrentDay - 1;
             ModelHandler.sInfectedVisibleFarms.Add((ushort)farmID);
-            infoScript.PrintInfected("- Farm " + SideBarScript.Farms[farmID - 1].gameObject.name + " is infected.");
+            //infoScript.PrintInfected("- Farm " + SideBarScript.Farms[farmID - 1].gameObject.name + " is infected.");
         }
         aux.transform.parent = transform;
         aux.transform.SetAsLastSibling();

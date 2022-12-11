@@ -28,6 +28,7 @@ public class InfoScript : MonoBehaviour
 
 
     public TextMeshProUGUI myText;
+    public GameObject grid;
     static string farmID;
 
     public static InfoScript instance;
@@ -182,6 +183,61 @@ public class InfoScript : MonoBehaviour
         for(int i = infoPanel.transform.childCount - 1; i >= 0; i--)
         {
             DestroyImmediate(infoPanel.transform.GetChild(i).gameObject);
+        }
+    }
+
+    int page = 1;
+    public void updateFarmStatus()
+    {
+        int start = 0;
+        switch (page)
+        {
+            case 1:
+                start = 1;
+                break;
+            case 2:
+                start = 51;
+                break;
+            case 3:
+                start = 101;
+                break;
+        }
+        for(int i = 0; i < grid.transform.childCount; i++)
+        {
+            grid.transform.GetChild(i).GetComponent<TextMeshProUGUI>().text = start.ToString();
+            if (ModelHandler.sInfectedVisibleFarms.Contains((ushort)start))
+            {
+                grid.transform.GetChild(i).GetComponent<TextMeshProUGUI>().color = Color.red;
+            }
+            else if (ModelHandler.sUnderInvestigationFarms.Contains((ushort)start))
+            {
+                grid.transform.GetChild(i).GetComponent<TextMeshProUGUI>().color = Color.cyan;
+            }
+            else
+            {
+                grid.transform.GetChild(i).GetComponent<TextMeshProUGUI>().color = Color.white;
+            }
+            start++;
+        }
+    }
+
+    public void nextPage()
+    {
+        Debug.Log("next");
+        if(page < 3)
+        {
+            page++;
+            updateFarmStatus();
+        }
+    }
+
+    public void prevPage()
+    {
+        Debug.Log("prev");
+        if(page > 1)
+        {
+            page--;
+            updateFarmStatus();
         }
     }
 

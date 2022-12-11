@@ -10,6 +10,7 @@ public class DisableEnable : MonoBehaviour
     public GameObject infoButton;
     public Sprite hide, show;
     bool showing = false;
+    public GameObject next, prev;
 
     public void onButtonClick()
     {
@@ -27,11 +28,26 @@ public class DisableEnable : MonoBehaviour
         if (infoPanel.activeInHierarchy == true)
         {
             infoPanel.SetActive(false);
+            StartCoroutine(delayButtons(false));
         }
         else
         {
             infoPanel.SetActive(true);
+            StartCoroutine(delayButtons(true));
+            InfoScript.instance.updateFarmStatus();
         }
+    }
+
+    public IEnumerator delayButtons(bool status)
+    {
+        if(status)
+            yield return new WaitForSeconds(1.1f);
+        if (infoPanel.activeSelf || !status)
+        {
+            next.SetActive(status);
+            prev.SetActive(status);
+        }
+        yield return null;
     }
     /*
     public IEnumerator AnimationFirst(float seconds)
