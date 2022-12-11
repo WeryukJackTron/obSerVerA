@@ -83,7 +83,7 @@ public class LogScript : MonoBehaviour
                 Debug.Log(GameContext.busyVets + " Vets");
                 SideBarScript.Farms[int.Parse(farmidLog.text) - 1].transform.GetChild(4).gameObject.SetActive(true);
                 GameContext.sVetsSend++;
-                infoScript.PrintVets("- A vet has been sent to " + farmidLog.text + ".");
+                infoScript.PrintVets("- A vet has been sent to farm " + farmidLog.text + ".");
                 ModelHandler.sUnderInvestigationFarms.Add((ushort)int.Parse(farmidLog.text));
             }
         }
