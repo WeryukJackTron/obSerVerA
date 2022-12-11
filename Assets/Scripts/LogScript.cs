@@ -64,7 +64,7 @@ public class LogScript : MonoBehaviour
                             Debug.Log(GameContext.busyVets + " Vets");
                             transform.GetChild(4).gameObject.SetActive(true);
                             GameContext.sVetsSend++;
-                            infoScript.PrintVets("- A vet has been sent to " + gameObject.name + "."); // Added by Petter
+                            infoScript.PrintVets("- A vet has been sent to farm " + gameObject.name + "."); // Added by Petter
                             ModelHandler.sUnderInvestigationFarms.Add((ushort)int.Parse(transform.gameObject.name));
                         }
                         break;
