@@ -3,6 +3,10 @@
     The Sherlock of Outbreak Simulator Games
 </p>
 
+<br>
+
+This game is prototype made for [SVA](https://www.sva.se/), as an assignement for **Serious Games Project** course in the Master program at Skövde University (Autumn Semester 2022-2023).
+
 # Our Team
 
 * Dennis Mbuthia (Project Manager)
@@ -57,3 +61,8 @@ Rscript -e "install.packages('game.FMD', repos=c('https://SVA-SE.github.io/game.
 # Third Party Libraries
 
 [UnitySQLite](https://github.com/coryleach/UnitySQLite)
+
+# Third Party Assets
+
+* **Soundtrack:** [Beam](https://pixabay.com/es/music/video-juegos-sinnesloschen-beam-117362/) by sinneschlösen<br>
+* **SFX:** [Menu Selection Click](https://opengameart.org/content/menu-selection-click) by NenadSimic
