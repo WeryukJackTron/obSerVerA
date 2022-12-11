@@ -194,7 +194,7 @@ public static class ModelHandler
             Farm farm = sFarms[farmID - 1];
             //if (farm.I == 0)
             //    continue;
-            if (GameContext.sCalledSVA.Contains(farm.ID))
+            if (GameContext.sCalledSVA.Contains(farm.ID) || sInfectedVisibleFarms.Contains(farm.ID))
                 continue;
 
             const double p = 0.05;
