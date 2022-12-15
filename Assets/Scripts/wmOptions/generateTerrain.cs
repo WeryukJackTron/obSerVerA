@@ -7,15 +7,15 @@ public class generateTerrain : MonoBehaviour
 {
     public Sprite[] trees;
     public Sprite[] mountains;
-
     public Tilemap tilemap;
 
-    // Start is called before the first frame update
+    private static int seedOrigin = 0;
+
     void Start()
     {
+        seedOrigin = Random.Range(1, 10000);
         populateTiles();
     }
-
 
     void populateTiles()
     {
@@ -23,7 +23,7 @@ public class generateTerrain : MonoBehaviour
         {
             for (int y = 0; y < 89; y++)
             {
-                float noise = perlinNoise(x, y, 1.0f, 1.0f, 0.5f);
+                float noise = perlinNoise(x, y, 1.0f, 1.0f, 0.2f);
                 if (noise < 0.3f)
                 {
                     Vector3Int p = new Vector3Int(x, y, 0);
@@ -50,13 +50,11 @@ public class generateTerrain : MonoBehaviour
         float PerlinValue = 0f;
         float amplitude = 1f;
 
-
         // Get the perlin value at that octave and add it to the sum
-        PerlinValue += Mathf.PerlinNoise(x * 0.1f, y * 0.1f) * amplitude;
+        PerlinValue += Mathf.PerlinNoise( (x + seedOrigin) * 0.1f, (y + seedOrigin) * 0.1f) * amplitude;
 
         // Decrease the amplitude and the frequency
         amplitude *= persistance;
-
 
         // Return the noise value
         return PerlinValue * heightMultiplier;
