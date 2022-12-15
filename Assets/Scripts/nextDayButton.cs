@@ -9,6 +9,7 @@ public class nextDayButton : MonoBehaviour
 {
     public static List<int> farmid = new List<int>();
     public TextMeshProUGUI dayUI;
+    public GameObject calledSVAPanel;
 
     // Start is called before the first frame update
     void Start()
@@ -32,11 +33,33 @@ public class nextDayButton : MonoBehaviour
         List<ushort> calling = ModelHandler.GetWhoCalled();
         if(calling.Count > 0)
         {
+            List<int> callingList = new List<int>();
+
             foreach (ushort call in calling)
             {
                 SideBarScript.Farms[call - 1].transform.GetChild(1).gameObject.SetActive(true);
                 GameContext.sCalledSVA.Add(call);
+
+                callingList.Add((int)call);
             }
+
+            string callingStr = string.Join(", ", callingList.ToArray());
+
+            calledSVAPanel.SetActive(true);
+
+            GameObject subjectText = calledSVAPanel.transform.GetChild(2).gameObject;
+
+            if (calling.Count > 1)
+            {
+                subjectText.GetComponent<TMPro.TextMeshProUGUI>().text = "The   following   farms   are   reporting   symptoms:";
+            }
+            else
+            {
+                subjectText.GetComponent<TMPro.TextMeshProUGUI>().text = "The   following   farm   is   reporting   symptoms:";
+            }
+
+            GameObject callingStrText = calledSVAPanel.transform.GetChild(3).gameObject;
+            callingStrText.GetComponent<TMPro.TextMeshProUGUI>().text = callingStr;
         }
 
         GameContext.busyVets = 0;
