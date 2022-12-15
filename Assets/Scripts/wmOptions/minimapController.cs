@@ -4,66 +4,54 @@ using UnityEngine;
 
 public class minimapController : MonoBehaviour
 {
-    public Material cameraBoxMaterial;
-
-    public Camera minimap;
-
-    public float lineWidth;
-
+    public Camera mainCamera, minimapCamera;
     public Collider mapCollider;
+    public Material cameraBoxMaterial;
+    private Vector3 BottomLeftPos, BottomRightPos, TopLeftPos, TopRightPos;
 
-    private Vector3 GetCameraFrustumPoint(Vector3 position)
+    void Update()
     {
-        var positionRay = Camera.main.ScreenPointToRay(position);
-        RaycastHit hit;
-        Vector3 result = mapCollider.Raycast(positionRay, out hit, 200) ? hit.point : new Vector3();
+        // subtract 480f from Screen.width to account for side bar blocking view 
+        BottomLeftPos = minimapCamera.WorldToViewportPoint(GetCameraFrustumPosition(new Vector3(0f, 0f)));
+        BottomRightPos = minimapCamera.WorldToViewportPoint(GetCameraFrustumPosition(new Vector3(Screen.width - 480f, 0f)));
+        TopLeftPos = minimapCamera.WorldToViewportPoint(GetCameraFrustumPosition(new Vector3(0, Screen.height)));
+        TopRightPos = minimapCamera.WorldToViewportPoint(GetCameraFrustumPosition(new Vector3(Screen.width - 480f, Screen.height)));
+        BottomLeftPos.z = 1f;
+        BottomRightPos.z = 1f;
+        TopLeftPos.z = 1f;
+        TopRightPos.z = 1f;
+    } 
 
-        return result;
+    private Vector3 GetCameraFrustumPosition(Vector3 position)
+    {
+        var positionRay = mainCamera.ScreenPointToRay(position);
+        RaycastHit hit;
+        if (mapCollider.Raycast(positionRay, out hit, 20f)){
+            return hit.point;
+        }
+        else
+        {
+            return new Vector3();
+        }
     }
 
     public void OnPostRender()
     {
-        Vector3 minViewportPoint = minimap.WorldToViewportPoint(GetCameraFrustumPoint(new Vector3(0f, 0f)));
-        Vector3 maxViewportPoint = minimap.WorldToViewportPoint(GetCameraFrustumPoint(new Vector3(Screen.width - 480f, Screen.height)));
-
-        float minX = minViewportPoint.x;
-        float minY = minViewportPoint.y;
-
-        float maxX = maxViewportPoint.x;
-        float maxY = maxViewportPoint.y;
-
         GL.PushMatrix();
         {
             cameraBoxMaterial.SetPass(0);
             GL.LoadOrtho();
-
-            GL.Begin(GL.QUADS);
-            GL.Color(Color.red);
+            GL.Begin(GL.LINES);
+            GL.Color(Color.blue);
             {
-
-                GL.Vertex(new Vector3(minX, minY + lineWidth, 0));
-                GL.Vertex(new Vector3(minX, minY - lineWidth, 0));
-                GL.Vertex(new Vector3(maxX, minY - lineWidth, 0));
-                GL.Vertex(new Vector3(maxX, minY + lineWidth, 0));
-
-
-                GL.Vertex(new Vector3(minX + lineWidth, minY, 0));
-                GL.Vertex(new Vector3(minX - lineWidth, minY, 0));
-                GL.Vertex(new Vector3(minX - lineWidth, maxY, 0));
-                GL.Vertex(new Vector3(minX + lineWidth, maxY, 0));
-
-
-
-                GL.Vertex(new Vector3(minX, maxY + lineWidth, 0));
-                GL.Vertex(new Vector3(minX, maxY - lineWidth, 0));
-                GL.Vertex(new Vector3(maxX, maxY - lineWidth, 0));
-                GL.Vertex(new Vector3(maxX, maxY + lineWidth, 0));
-
-                GL.Vertex(new Vector3(maxX + lineWidth, minY, 0));
-                GL.Vertex(new Vector3(maxX - lineWidth, minY, 0));
-                GL.Vertex(new Vector3(maxX - lineWidth, maxY, 0));
-                GL.Vertex(new Vector3(maxX + lineWidth, maxY, 0));
-
+                GL.Vertex(BottomLeftPos);
+                GL.Vertex(BottomRightPos);
+                GL.Vertex(BottomRightPos);
+                GL.Vertex(TopRightPos);
+                GL.Vertex(TopRightPos);
+                GL.Vertex(TopLeftPos);
+                GL.Vertex(TopLeftPos);
+                GL.Vertex(BottomLeftPos);
             }
             GL.End();
         }

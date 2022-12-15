@@ -13127,10 +13127,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77372d010e4cf2c47ba12eae82a99c52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraBoxMaterial: {fileID: 2100000, guid: 60d568aa1713158489eadfccad32596b, type: 2}
-  minimap: {fileID: 782011386}
-  lineWidth: 0.005
+  mainCamera: {fileID: 368183947}
+  minimapCamera: {fileID: 782011386}
   mapCollider: {fileID: 51005530}
+  cameraBoxMaterial: {fileID: 2100000, guid: 60d568aa1713158489eadfccad32596b, type: 2}
 --- !u!1 &796510529
 GameObject:
   m_ObjectHideFlags: 0
